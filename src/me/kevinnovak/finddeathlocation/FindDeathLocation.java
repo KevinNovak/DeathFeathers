@@ -2,7 +2,6 @@ package me.kevinnovak.finddeathlocation;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -27,11 +26,9 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     public void onDeath(PlayerDeathEvent e) {
         if (e.getEntityType() == EntityType.PLAYER) {
             Player player = e.getEntity();
-            player.sendMessage(ChatColor.DARK_BLUE + "You Died");
-            getConfig().set(player.getName() + ".X", player.getLocation().getBlockX());
-            getConfig().set(player.getName() + ".Y", player.getLocation().getBlockY());
-            getConfig().set(player.getName() + ".Z", player.getLocation().getBlockZ());
             getConfig().set(player.getName() + ".World", player.getLocation().getWorld().getName());
+            getConfig().set(player.getName() + ".X", player.getLocation().getBlockX());
+            getConfig().set(player.getName() + ".Z", player.getLocation().getBlockZ());
             saveConfig();
         }
     }
@@ -45,14 +42,17 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         Player player = (Player) sender;
         if(cmd.getName().equalsIgnoreCase("finddeath")) {
             String playername = player.getName();
-            player.sendMessage("Location: " + getConfig().getString(playername + ".World"));
             World world = getServer().getWorld(getConfig().getString(playername + ".World"));
-            int xPosition = Integer.parseInt(getConfig().getString(playername + ".X"));
-            int yPosition = Integer.parseInt(getConfig().getString(playername + ".Y"));
-            int zPosition = Integer.parseInt(getConfig().getString(playername + ".Z"));
-            Location deathlocation = new Location(world, xPosition, yPosition, zPosition);
-            int distanceToDeath = (int)deathlocation.distance(player.getLocation());
-            player.sendMessage(ChatColor.GOLD + "Your death location is "+ distanceToDeath + " blocks away!");
+            if (world == player.getWorld()) {
+                int xPos = Integer.parseInt(getConfig().getString(playername + ".X"));
+                int zPos = Integer.parseInt(getConfig().getString(playername + ".Z"));
+                int pxPos = player.getLocation().getBlockX();
+                int pzPos = player.getLocation().getBlockZ();
+                int distanceToDeath = (int) Math.sqrt(((xPos - pxPos)*(xPos - pxPos)) + ((zPos - pzPos)*(zPos - pzPos)));
+                player.sendMessage(ChatColor.GOLD + "Your death location is "+ distanceToDeath + " blocks away!");
+            } else {
+                player.sendMessage(ChatColor.RED + "Your death location is in another world!");
+            }
         }
         return true;
     }
