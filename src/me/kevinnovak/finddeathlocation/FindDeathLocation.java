@@ -24,10 +24,12 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     public File deathsFile = new File(getDataFolder()+"/deaths.yml");
     public FileConfiguration deathData = YamlConfiguration.loadConfiguration(deathsFile);
     
-    
     public void onEnable() {
-        Bukkit.getServer().getLogger().info("FindDeathLocation Enabled!");
+        // only if there isnt a configuration file
+        getConfig().options().copyDefaults(true);
+        saveConfig();
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
+        Bukkit.getServer().getLogger().info("FindDeathLocation Enabled!");
     }
   
     public void onDisable() {
@@ -58,6 +60,9 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
             if (player.getItemInHand().getType() == Material.FEATHER) {
                 String playername = player.getName();
+                if (deathData.getString(playername) == null) {
+                    return;
+                }
                 World world = getServer().getWorld(deathData.getString(playername + ".World"));
                 if (world == player.getWorld()) {
                     int xPos = Integer.parseInt(deathData.getString(playername + ".X"));
