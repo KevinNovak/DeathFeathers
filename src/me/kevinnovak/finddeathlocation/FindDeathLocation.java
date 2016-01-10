@@ -2,6 +2,8 @@ package me.kevinnovak.finddeathlocation;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -45,6 +47,12 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             player.sendMessage(ChatColor.GOLD + "Finding death location!");
             String playername = player.getName();
             player.sendMessage("Location: " + getConfig().getString(playername + ".World"));
+            World world = getServer().getWorld(getConfig().getString(playername + ".World"));
+            int xPosition = Integer.parseInt(getConfig().getString(playername + ".X"));
+            int yPosition = Integer.parseInt(getConfig().getString(playername + ".Y"));
+            int zPosition = Integer.parseInt(getConfig().getString(playername + ".Z"));
+            Location deathlocation = new Location(world, xPosition, yPosition, zPosition);
+            player.sendMessage("Location: " + deathlocation.distance(player.getLocation()));
         }
         return true;
     }
