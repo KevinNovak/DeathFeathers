@@ -44,7 +44,6 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
 
         Player player = (Player) sender;
         if(cmd.getName().equalsIgnoreCase("finddeath")) {
-            player.sendMessage(ChatColor.GOLD + "Finding death location!");
             String playername = player.getName();
             player.sendMessage("Location: " + getConfig().getString(playername + ".World"));
             World world = getServer().getWorld(getConfig().getString(playername + ".World"));
@@ -52,7 +51,8 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             int yPosition = Integer.parseInt(getConfig().getString(playername + ".Y"));
             int zPosition = Integer.parseInt(getConfig().getString(playername + ".Z"));
             Location deathlocation = new Location(world, xPosition, yPosition, zPosition);
-            player.sendMessage("Location: " + deathlocation.distance(player.getLocation()));
+            int distanceToDeath = (int)deathlocation.distance(player.getLocation());
+            player.sendMessage(ChatColor.GOLD + "Your death location is "+ distanceToDeath + " blocks away!");
         }
         return true;
     }
