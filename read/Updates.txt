@@ -1,0 +1,5 @@
+date and time of death?
+sort player deaths alphabetically
+configurable item
+command to give that item
+configurable language
