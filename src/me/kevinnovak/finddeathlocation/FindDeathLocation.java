@@ -1,11 +1,16 @@
 package me.kevinnovak.finddeathlocation;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +21,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FindDeathLocation extends JavaPlugin implements Listener{
+    public File deathsFile = new File(getDataFolder()+"/deaths.yml");
+    public FileConfiguration deathData = YamlConfiguration.loadConfiguration(deathsFile);
+    
+    
     public void onEnable() {
         Bukkit.getServer().getLogger().info("FindDeathLocation Enabled!");
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
@@ -29,10 +38,15 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     public void onDeath(PlayerDeathEvent e) {
         if (e.getEntityType() == EntityType.PLAYER) {
             Player player = e.getEntity();
-            getConfig().set(player.getName() + ".World", player.getLocation().getWorld().getName());
-            getConfig().set(player.getName() + ".X", player.getLocation().getBlockX());
-            getConfig().set(player.getName() + ".Z", player.getLocation().getBlockZ());
-            saveConfig();
+            deathData.set(player.getName() + ".World", player.getLocation().getWorld().getName());
+            deathData.set(player.getName() + ".X", player.getLocation().getBlockX());
+            deathData.set(player.getName() + ".Z", player.getLocation().getBlockZ());
+            try {
+                deathData.save(deathsFile);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         }
     }
     
@@ -42,12 +56,12 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         Action action = event.getAction();
         
         if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
-            if (player.getItemInHand().getType() == Material.BLAZE_ROD) {
+            if (player.getItemInHand().getType() == Material.FEATHER) {
                 String playername = player.getName();
-                World world = getServer().getWorld(getConfig().getString(playername + ".World"));
+                World world = getServer().getWorld(deathData.getString(playername + ".World"));
                 if (world == player.getWorld()) {
-                    int xPos = Integer.parseInt(getConfig().getString(playername + ".X"));
-                    int zPos = Integer.parseInt(getConfig().getString(playername + ".Z"));
+                    int xPos = Integer.parseInt(deathData.getString(playername + ".X"));
+                    int zPos = Integer.parseInt(deathData.getString(playername + ".Z"));
                     int pxPos = player.getLocation().getBlockX();
                     int pzPos = player.getLocation().getBlockZ();
                     int distanceToDeath = (int) Math.sqrt(((xPos - pxPos)*(xPos - pxPos)) + ((zPos - pzPos)*(zPos - pzPos)));
@@ -69,10 +83,10 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         Player player = (Player) sender;
         if(cmd.getName().equalsIgnoreCase("finddeath")) {
             String playername = player.getName();
-            World world = getServer().getWorld(getConfig().getString(playername + ".World"));
+            World world = getServer().getWorld(deathData.getString(playername + ".World"));
             if (world == player.getWorld()) {
-                int xPos = Integer.parseInt(getConfig().getString(playername + ".X"));
-                int zPos = Integer.parseInt(getConfig().getString(playername + ".Z"));
+                int xPos = Integer.parseInt(deathData.getString(playername + ".X"));
+                int zPos = Integer.parseInt(deathData.getString(playername + ".Z"));
                 int pxPos = player.getLocation().getBlockX();
                 int pzPos = player.getLocation().getBlockZ();
                 int distanceToDeath = (int) Math.sqrt(((xPos - pxPos)*(xPos - pxPos)) + ((zPos - pzPos)*(zPos - pzPos)));
