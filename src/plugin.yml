@@ -1,0 +1,10 @@
+name: FindDeathLocation
+version: 1.0
+main: me.kevinnovak.finddeathlocation.FindDeathLocation
+author: Kevin Novak
+description: Finds players death location!
+
+commands:
+    finddeath:
+        usage: /<command>
+        description: Finds players death location!
