@@ -7,8 +7,9 @@
 item: 288
 
 # When players teleport to a death location,
-# how many blocks above should they teleport to?
+# how many blocks above should they teleport?
 # This is to prevent accidentally picking up a players items
 # by default 0, meaning you will pick up any nearby items
+# 1 works well to avoid picking up items
 # default: numBlocksAbove: 0
 numBlocksAbove: 0
