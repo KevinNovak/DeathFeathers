@@ -7,4 +7,18 @@ description: Finds players death location!
 commands:
     finddeath:
         usage: /<command>
-        description: Finds players death location!
+        description: Finds distance to players death location.
+    tpdeath:
+        usage: /<command>
+        description: Teleports to a players death location.
+        
+permissions:
+    finddeathlocation.item:
+        description: Use the find death item.
+        default: op
+    finddeathlocation.command:
+        description: Use the find death command.
+        default: op
+    finddeathlocation.tp:
+        description: Teleport to a death location.
+        default: op

@@ -1,1 +1,14 @@
 # Configuration file for FindDeathLocation
+
+# The item which can be used to find your last death location
+# must be an item ID, by default 288, a feather
+# requires permission: finddeathlocation.item
+# default: item: 288
+item: 288
+
+# When players teleport to a death location,
+# how many blocks above should they teleport to?
+# This is to prevent accidentally picking up a players items
+# by default 0, meaning you will pick up any nearby items
+# default: numBlocksAbove: 0
+numBlocksAbove: 0
