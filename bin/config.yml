@@ -13,3 +13,11 @@ item: 288
 # 1 works well to avoid picking up items
 # default: numBlocksAbove: 0
 numBlocksAbove: 0
+
+# Language
+notpermitted: '&cYou are not permitted to do this!'
+notdied: '&cYou have not yet died!'
+anotherworld: '&cYour death location is in another world!'
+noconsole: '&cConsole cannot run FindDeathLocation commands!'
+noplayer: '&cPlease specify a player!'
+nolocation: '&cPlayer death location not found!'
