@@ -6,6 +6,18 @@
 # default: item: 288
 item: 288
 
+# Which mouse button should the above item use?
+# it is possible to use both here, if desired
+# default: leftClick: true
+# default: rightClick: false
+leftClick: true
+rightClick: false
+
+# The time, in seconds, to wait before teleporting to a players death location
+# can be bypassed with the permission finddeathlocation.tp.bypass
+# default: delaySeconds: 5
+delaySeconds: 5
+
 # When players teleport to a death location,
 # how many blocks above should they teleport?
 # This is to prevent accidentally picking up a players items
@@ -19,5 +31,9 @@ notpermitted: '&cYou are not permitted to do this!'
 notdied: '&cYou have not yet died!'
 anotherworld: '&cYour death location is in another world!'
 noconsole: '&cConsole cannot run FindDeathLocation commands!'
-noplayer: '&cPlease specify a player!'
 nolocation: '&cPlayer death location not found!'
+
+# Whether or not to collect data on plugin usage
+# Viewable at http://mcstats.org/plugin/FindDeathLocation
+# default: metrics: true
+metrics: true

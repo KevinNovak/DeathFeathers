@@ -37,14 +37,25 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     public void onEnable() {
         saveDefaultConfig();
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
-        Bukkit.getServer().getLogger().info("FindDeathLocation Enabled!");
+        if (getConfig().getBoolean("metrics")) {
+            try {
+                MetricsLite metrics = new MetricsLite(this);
+                metrics.start();
+                Bukkit.getServer().getLogger().info("[FindDeathLocation] Metrics Enabled!");
+            } catch (IOException e) {
+                Bukkit.getServer().getLogger().info("[FindDeathLocation] Failed to Start Metrics.");
+            }
+        } else {
+            Bukkit.getServer().getLogger().info("[FindDeathLocation] Metrics Disabled.");
+        }
+        Bukkit.getServer().getLogger().info("[FindDeathLocation] Plugin Enabled!");
     }
   
     // ======================
     // Disable
     // ======================
     public void onDisable() {
-        Bukkit.getServer().getLogger().info("FindDeathLocation Disabled!");
+        Bukkit.getServer().getLogger().info("[FindDeathLocation] Plugin Disabled!");
     }
     
     // =========================
@@ -52,28 +63,6 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     // =========================
     String convertedLang(String toConvert) {
         return ChatColor.translateAlternateColorCodes('&', getConfig().getString(toConvert));
-    }
-    
-    // ===========================
-    // Sending Distance to Player
-    // ===========================
-    void sendDistance(Player player) {
-        String playername = player.getName();
-        if (deathData.getString(playername) == null) {
-            player.sendMessage(convertedLang("notdied"));
-            return;
-        }
-        World world = getServer().getWorld(deathData.getString(playername + ".World"));
-        if (world == player.getWorld()) {
-            int xPos = Integer.parseInt(deathData.getString(playername + ".X"));
-            int zPos = Integer.parseInt(deathData.getString(playername + ".Z"));
-            int pxPos = player.getLocation().getBlockX();
-            int pzPos = player.getLocation().getBlockZ();
-            int distanceToDeath = (int) Math.sqrt(((xPos - pxPos)*(xPos - pxPos)) + ((zPos - pzPos)*(zPos - pzPos)));
-            player.sendMessage(ChatColor.GRAY + "Your last death location is currently " + distanceToDeath + " blocks away.");
-        } else {
-            player.sendMessage(convertedLang("anotherworld"));
-        }   
     }
 
     // ======================
@@ -96,6 +85,50 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         }
     }
     
+    // ===========================
+    // Sending Distance to Player
+    // ===========================
+    void sendDistance(Player player) {
+        String playername = player.getName();
+        if (deathData.getString(playername) == null) {
+            player.sendMessage(convertedLang("notdied"));
+            return;
+        }
+        World world = getServer().getWorld(deathData.getString(playername + ".World"));
+        if (world == player.getWorld()) {
+            int xPos = Integer.parseInt(deathData.getString(playername + ".X"));
+            int zPos = Integer.parseInt(deathData.getString(playername + ".Z"));
+            int pxPos = player.getLocation().getBlockX();
+            int pzPos = player.getLocation().getBlockZ();
+            int distanceToDeath = (int) Math.sqrt(((xPos - pxPos)*(xPos - pxPos)) + ((zPos - pzPos)*(zPos - pzPos)));
+            player.sendMessage(convertedLang("senddistance").replace("{DISTANCE}", Integer.toString(distanceToDeath)));
+        } else {
+            player.sendMessage(convertedLang("anotherworld"));
+        }   
+    }
+    
+    // ======================
+    // Teleport Player
+    // ======================
+    void teleportPlayer(Player player, String target) {
+        World world = getServer().getWorld(deathData.getString(target + ".World"));
+        int xPos = Integer.parseInt(deathData.getString(target + ".X"));
+        int yPos = Integer.parseInt(deathData.getString(target + ".Y")) + getConfig().getInt("numBlocksAbove");
+        int zPos = Integer.parseInt(deathData.getString(target + ".Z"));
+        Location targetLocation = new Location(world, xPos, yPos, zPos);
+        if (!player.hasPermission("finddeathlocation.tp.bypass")) {
+            int delaySeconds = getConfig().getInt("delaySeconds");
+            player.sendMessage(convertedLang("teleporting").replace("{DELAY}", Integer.toString(delaySeconds)));
+            getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
+                public void run() {
+                    player.teleport(targetLocation);
+                }
+            }, delaySeconds * 20L);
+        } else {
+            player.teleport(targetLocation);
+        }
+    }
+    
     // ======================
     // Clicking with Item
     // ======================
@@ -105,15 +138,30 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         Action action = event.getAction();
         
         // if player is left clicking with item
-        if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
-            if (player.getItemInHand().getType() == item.getType()) {
-                // no permission
-                if (!player.hasPermission("finddeathlocation.item")) {
-                    player.sendMessage(convertedLang("notpermitted"));
-                    return;
-                }    
-                // run command
-                sendDistance(player);
+        if (getConfig().getBoolean("leftClick")) {
+            if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
+                if (player.getItemInHand().getType() == item.getType()) {
+                    // no permission
+                    if (!player.hasPermission("finddeathlocation.item")) {
+                        player.sendMessage(convertedLang("notpermitted"));
+                        return;
+                    }
+                    // run command
+                    sendDistance(player);
+                }
+            }
+        }
+        if (getConfig().getBoolean("rightClick")) {
+            if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
+                if (player.getItemInHand().getType() == item.getType()) {
+                    // no permission
+                    if (!player.hasPermission("finddeathlocation.item")) {
+                        player.sendMessage(convertedLang("notpermitted"));
+                        return;
+                    }
+                    // run command
+                    sendDistance(player);
+                }
             }
         }
     }
@@ -139,9 +187,11 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             if (!player.hasPermission("finddeathlocation.command")) {
                 player.sendMessage(convertedLang("notpermitted"));
                 return true;
+            } else {
+                // run command
+                sendDistance(player);
             }
-            // run command
-            sendDistance(player);
+            return true;
         }
         
         
@@ -149,29 +199,34 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         // /tpdeath
         // ======================
         if(cmd.getName().equalsIgnoreCase("tpdeath")) {
-            // no permission
-            if (!player.hasPermission("finddeathlocation.tp")) {
-                player.sendMessage(convertedLang("notpermitted"));
-                return true;
-            }
             // no arguments
             if(args.length == 0) {
-                player.sendMessage(convertedLang("noplayer"));
-                return true;
+                if (!player.hasPermission("finddeathlocation.tp")) {
+                    player.sendMessage(convertedLang("notpermitted"));
+                    return true;
+                } else {
+                    if (deathData.getString(player.getName()) == null) {
+                        player.sendMessage(convertedLang("notdied"));
+                        return true;
+                    } else {
+                        teleportPlayer(player, player.getName());
+                        return true;
+                    }
+                }
             }
             // no storage
-            String playername = args[0];
-            if (deathData.getString(playername) == null) {
-                player.sendMessage(convertedLang("nolocation"));
+            String target = args[0];
+            if (!player.hasPermission("finddeathlocation.tp.others")) {
+                player.sendMessage(convertedLang("notpermitted"));
                 return true;
-            // run command
             } else {
-                World world = getServer().getWorld(deathData.getString(playername + ".World"));
-                int xPos = Integer.parseInt(deathData.getString(playername + ".X"));
-                int yPos = Integer.parseInt(deathData.getString(playername + ".Y")) + getConfig().getInt("numBlocksAbove");
-                int zPos = Integer.parseInt(deathData.getString(playername + ".Z"));
-                Location targetLocation = new Location(world, xPos, yPos, zPos);
-                player.teleport(targetLocation);
+                if (deathData.getString(target) == null) {
+                    player.sendMessage(convertedLang("nolocation"));
+                    return true;
+                // run command
+                } else {
+                    teleportPlayer(player, target);
+                }
             }
             return true;
         }  

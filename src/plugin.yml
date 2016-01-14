@@ -1,7 +1,7 @@
 name: FindDeathLocation
-version: 1.2.0
+version: 1.2.5
 main: me.kevinnovak.finddeathlocation.FindDeathLocation
-author: Kevin Novak
+author: KevinNovak
 description: Finds players death location!
 
 commands:
@@ -20,5 +20,11 @@ permissions:
         description: Use the find death command.
         default: op
     finddeathlocation.tp:
-        description: Teleport to a death location.
+        description: Teleport to your death location.
+        default: op
+    finddeathlocation.tp.others:
+        description: Teleport to a players death location.
+        default: op
+    finddeathlocation.tp.bypass:
+        description: Bypass the teleportation delay.
         default: op
