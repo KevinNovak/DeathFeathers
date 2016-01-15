@@ -104,7 +104,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             player.sendMessage(convertedLang("senddistance").replace("{DISTANCE}", Integer.toString(distanceToDeath)));
         } else {
             player.sendMessage(convertedLang("anotherworld"));
-        }   
+        }
     }
     
     // ======================

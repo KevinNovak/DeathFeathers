@@ -27,6 +27,12 @@ delaySeconds: 5
 numBlocksAbove: 0
 
 # Language
+# for senddistance, place the variable "{DISTANCE}" where you would like the distance
+# default: senddistance: '&7Your last death is &6{DISTANCE} &7blocks away.'
+senddistance: '&7Your last death is &6{DISTANCE} &7blocks away.'
+# for teleporting, place the variable "{DELAY}" where you would like the delay time
+# default: teleporting: '&7Teleporting in {DELAY} seconds...'
+teleporting: '&7Teleporting in {DELAY} seconds...'
 notpermitted: '&cYou are not permitted to do this!'
 notdied: '&cYou have not yet died!'
 anotherworld: '&cYour death location is in another world!'
