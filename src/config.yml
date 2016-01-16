@@ -13,6 +13,21 @@ item: 288
 leftClick: true
 rightClick: false
 
+# Should players be given the item when they respawn?
+# default: itemOnRespawn: false
+itemOnRespawn: false
+
+# Should compasses point to players last death locations?
+# If you would also like players to click with a compass for distance,
+# then change the "item" above to be a compass, item ID 345 
+# default: compassDirection: false
+compassDirection: false
+
+# Should distances be calculated in 3 dimensions instead of 2?
+# in other words, should height count towards distance?
+# default: distance3D: false
+distance3D: false
+
 # The time, in seconds, to wait before teleporting to a players death location
 # can be bypassed with the permission finddeathlocation.tp.bypass
 # default: delaySeconds: 5
@@ -26,6 +41,10 @@ delaySeconds: 5
 # default: numBlocksAbove: 0
 numBlocksAbove: 0
 
+# Whether the console should log players death locations.
+# default: consoleLog: true
+consoleLog: true
+
 # Language
 # for senddistance, place the variable "{DISTANCE}" where you would like the distance
 # default: senddistance: '&7Your last death is &6{DISTANCE} &7blocks away.'
@@ -33,6 +52,9 @@ senddistance: '&7Your last death is &6{DISTANCE} &7blocks away.'
 # for teleporting, place the variable "{DELAY}" where you would like the delay time
 # default: teleporting: '&7Teleporting in {DELAY} seconds...'
 teleporting: '&7Teleporting in {DELAY} seconds...'
+# for deathlog, place the variables "{PLAYER}", "{LOCATION}", and "{WORLD}" where you'd like
+# default: deathlog: '{PLAYER} has died at {LOCATION} in {WORLD}.'
+deathlog: '&7{PLAYER} has died at &6{LOCATION} &7in {WORLD}.'
 notpermitted: '&cYou are not permitted to do this!'
 notdied: '&cYou have not yet died!'
 anotherworld: '&cYour death location is in another world!'

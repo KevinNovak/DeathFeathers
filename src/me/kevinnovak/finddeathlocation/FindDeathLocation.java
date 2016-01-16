@@ -17,7 +17,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,6 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 @SuppressWarnings("deprecation")
 
 public class FindDeathLocation extends JavaPlugin implements Listener{
+    
     // create deaths.yml file
     public File deathsFile = new File(getDataFolder()+"/deaths.yml");
     public FileConfiguration deathData = YamlConfiguration.loadConfiguration(deathsFile);
@@ -82,7 +86,65 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
+            // ======================
+            // Death Logging
+            // ======================
+            String location = player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ();
+            String deathlog = convertedLang("deathlog").replace("{PLAYER}", player.getName()).replace("{LOCATION}", location).replace("{WORLD}", player.getLocation().getWorld().getName());
+            if (getConfig().getBoolean("consoleLog")) {
+                Bukkit.getServer().getLogger().info("[FindDeathLocation] " + player.getName() + " has died at " + location + " in " + player.getLocation().getWorld().getName() + ".");
+            }
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                if (onlinePlayer.hasPermission("finddeathlocation.log")) {
+                    onlinePlayer.sendMessage(deathlog);
+                }
+            }
         }
+    }
+    
+    // ======================
+    // Events to Set Compass
+    // ======================
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent e) {
+        if (getConfig().getBoolean("itemOnRespawn")) {
+            e.getPlayer().getInventory().addItem(item);
+        }
+        if (getConfig().getBoolean("compassDirection")) {
+            setCompass(e.getPlayer());
+        }
+    }
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e) {
+        if (getConfig().getBoolean("compassDirection")) {
+            setCompass(e.getPlayer());
+        }
+    }
+    @EventHandler
+    public void onChangeWorld(PlayerChangedWorldEvent e) {
+        if (getConfig().getBoolean("compassDirection")) {
+            setCompass(e.getPlayer());
+        }
+    }
+    
+    // ======================
+    // Setting Compass
+    // ======================
+    void setCompass(Player player) {
+        getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
+            public void run() {
+                String playername = player.getName();
+                if (deathData.getString(playername) == null) {
+                    return;
+                }
+                World world = getServer().getWorld(deathData.getString(playername + ".World"));
+                int xPos = Integer.parseInt(deathData.getString(playername + ".X"));
+                int yPos = Integer.parseInt(deathData.getString(playername + ".Y")) + getConfig().getInt("numBlocksAbove");
+                int zPos = Integer.parseInt(deathData.getString(playername + ".Z"));
+                Location targetLocation = new Location(world, xPos, yPos, zPos);
+                player.setCompassTarget(targetLocation);
+            }
+        }, 1 * 20L);
     }
     
     // ===========================
@@ -97,10 +159,17 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         World world = getServer().getWorld(deathData.getString(playername + ".World"));
         if (world == player.getWorld()) {
             int xPos = Integer.parseInt(deathData.getString(playername + ".X"));
+            int yPos = Integer.parseInt(deathData.getString(playername + ".Y"));
             int zPos = Integer.parseInt(deathData.getString(playername + ".Z"));
             int pxPos = player.getLocation().getBlockX();
+            int pyPos = player.getLocation().getBlockY();
             int pzPos = player.getLocation().getBlockZ();
-            int distanceToDeath = (int) Math.sqrt(((xPos - pxPos)*(xPos - pxPos)) + ((zPos - pzPos)*(zPos - pzPos)));
+            int distanceToDeath = 0;
+            if (getConfig().getBoolean("distance3D")) {
+                distanceToDeath = (int) Math.sqrt(((xPos - pxPos)*(xPos - pxPos)) + ((zPos - pzPos)*(zPos - pzPos)) + ((yPos - pyPos)*(yPos - pyPos)));
+            } else {
+                distanceToDeath = (int) Math.sqrt(((xPos - pxPos)*(xPos - pxPos)) + ((zPos - pzPos)*(zPos - pzPos)));
+            }
             player.sendMessage(convertedLang("senddistance").replace("{DISTANCE}", Integer.toString(distanceToDeath)));
         } else {
             player.sendMessage(convertedLang("anotherworld"));
