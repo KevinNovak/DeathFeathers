@@ -1,0 +1,27 @@
+	language config for distance
+	have a compass point to the direction of your last death
+ignore case when searching for players
+	optional time delay for teleport with bypass permission
+	configure for right and/or left click
+kit-ish thing that give you the item
+item must have a special config name "&bDeath Feather"
+finddeathlocation help
+better organizing death files
+	metrics
+colors in enable and disable
+nicknames for worlds
+	send death locations to console
+	send death locations to admins
+separate language file, give credit to users for translations
+add on plugin sites for translations
+cant move more than a few blocks while waiting for delay
+	recieve item on death boolean in config
+	reset compass on enable if compassdirection = false
+	WHAT IF UNDEFINED LOCATION FOR COMPASS
+check all messages support colors
+date and time of death?
+sort player deaths alphabetically
+configurable item
+command to give that item
+configurable language
+********teleportation cooldown
