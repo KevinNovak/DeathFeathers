@@ -1,5 +1,5 @@
 name: FindDeathLocation
-version: 1.3.3
+version: 1.3.4
 main: me.kevinnovak.finddeathlocation.FindDeathLocation
 author: KevinNovak
 description: Finds players death location!
@@ -30,4 +30,4 @@ permissions:
         default: op
     finddeathlocation.log:
         description: See death locations when players die.
-        default: op
+        default: false
