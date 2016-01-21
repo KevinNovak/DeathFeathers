@@ -33,6 +33,8 @@ distance3D: false
 # default: delaySeconds: 5
 delaySeconds: 5
 
+cooldownSeconds: 10
+
 # When players teleport to a death location,
 # how many blocks above should they teleport?
 # This is to prevent accidentally picking up a players items

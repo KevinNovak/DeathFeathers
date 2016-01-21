@@ -2,6 +2,7 @@ package me.kevinnovak.finddeathlocation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,6 +24,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 // suppress the item id warnings
 @SuppressWarnings("deprecation")
@@ -34,6 +36,9 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     public FileConfiguration deathData = YamlConfiguration.loadConfiguration(deathsFile);
     // load the item to listen for
     ItemStack item = new ItemStack(getConfig().getInt("item")); 
+    // cooldown hashmaps
+    private HashMap<Player, Integer> cooldownTime;
+    private HashMap<Player, BukkitRunnable> cooldownTask;
     
     // ======================
     // Enable
@@ -41,6 +46,14 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     public void onEnable() {
         saveDefaultConfig();
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
+        
+        
+        
+        cooldownTime = new HashMap<Player, Integer>();
+        cooldownTask = new HashMap<Player, BukkitRunnable>();
+        
+        
+        
         if (getConfig().getBoolean("metrics")) {
             try {
                 MetricsLite metrics = new MetricsLite(this);
@@ -247,7 +260,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             return true;
         }
         
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
         // ======================
         // /finddeath
         // ======================
@@ -268,6 +281,16 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         // /tpdeath
         // ======================
         if(cmd.getName().equalsIgnoreCase("tpdeath")) {
+            
+            
+            
+            if (cooldownTime.containsKey(player)) {
+                player.sendMessage(ChatColor.RED + "You must wait for " + cooldownTime.get(player) + " seconds.");
+                return true;
+            }
+
+            
+            
             // no arguments
             if(args.length == 0) {
                 if (!player.hasPermission("finddeathlocation.tp")) {
@@ -279,6 +302,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                         return true;
                     } else {
                         teleportPlayer(player, player.getName());
+                        cooldown(player);
                         return true;
                     }
                 }
@@ -295,10 +319,27 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                 // run command
                 } else {
                     teleportPlayer(player, target);
+                    cooldown(player);
                 }
-            }
+            }    
             return true;
         }  
         return true;
+    }
+    
+    void cooldown(Player player) {
+        cooldownTime.put(player, getConfig().getInt("cooldownSeconds"));
+        cooldownTask.put(player, new BukkitRunnable() {
+                public void run() {
+                        cooldownTime.put(player, cooldownTime.get(player) - 1);
+                        if (cooldownTime.get(player) == 0) {
+                                cooldownTime.remove(player);
+                                cooldownTask.remove(player);
+                                cancel();
+                        }
+                }
+        });
+       
+        cooldownTask.get(player).runTaskTimer(this, 20, 20);
     }
 }

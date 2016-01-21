@@ -25,3 +25,4 @@ configurable item
 command to give that item
 configurable language
 ********teleportation cooldown
+metrics for all
