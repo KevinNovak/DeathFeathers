@@ -30,10 +30,15 @@ distance3D: false
 
 # The time, in seconds, to wait before teleporting to a players death location
 # can be bypassed with the permission finddeathlocation.tp.bypass
+# or set to 0 to disable completely
 # default: delaySeconds: 5
 delaySeconds: 5
 
-cooldownSeconds: 10
+# The time, in seconds, before a player can use /tpdeath or /tpdeath <player>
+# can be bypassed with the permission finddeathlocation.tp.bypass
+# or set to 0 to disable completely
+# default: cooldownSeconds: 3600
+cooldownSeconds: 3600
 
 # When players teleport to a death location,
 # how many blocks above should they teleport?
@@ -54,12 +59,16 @@ senddistance: '&7Your last death is &6{DISTANCE} &7blocks away.'
 # for teleporting, place the variable "{DELAY}" where you would like the delay time
 # default: teleporting: '&7Teleporting in {DELAY} seconds...'
 teleporting: '&7Teleporting in {DELAY} seconds...'
+# for cooldown, place the variable "{COOLDOWN}" where you would like the cooldown time
+# default: cooldown: '&7You must wait {COOLDOWN}.'
+cooldown: '&7You must wait {COOLDOWN}.'
 # for deathlog, place the variables "{PLAYER}", "{LOCATION}", and "{WORLD}" where you'd like
 # default: deathlog: '{PLAYER} has died at {LOCATION} in {WORLD}.'
 deathlog: '&7{PLAYER} has died at &6{LOCATION} &7in {WORLD}.'
 notpermitted: '&cYou are not permitted to do this!'
 notdied: '&cYou have not yet died!'
 anotherworld: '&cYour death location is in another world!'
+tpwait: '&cYou are already teleporting!'
 noconsole: '&cConsole cannot run FindDeathLocation commands!'
 nolocation: '&cPlayer death location not found!'
 

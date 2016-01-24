@@ -1,3 +1,4 @@
+free item naming
 	language config for distance
 	have a compass point to the direction of your last death
 ignore case when searching for players
@@ -21,8 +22,8 @@ cant move more than a few blocks while waiting for delay
 check all messages support colors
 date and time of death?
 sort player deaths alphabetically
-configurable item
+	configurable item
 command to give that item
 configurable language
-********teleportation cooldown
-metrics for all
+	teleportation cooldown
+	metrics for all

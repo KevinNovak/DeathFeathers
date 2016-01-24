@@ -198,14 +198,18 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         int yPos = Integer.parseInt(deathData.getString(target + ".Y")) + getConfig().getInt("numBlocksAbove");
         int zPos = Integer.parseInt(deathData.getString(target + ".Z"));
         Location targetLocation = new Location(world, xPos, yPos, zPos);
-        if (!player.hasPermission("finddeathlocation.tp.bypass")) {
-            int delaySeconds = getConfig().getInt("delaySeconds");
-            player.sendMessage(convertedLang("teleporting").replace("{DELAY}", Integer.toString(delaySeconds)));
-            getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
-                public void run() {
-                    player.teleport(targetLocation);
-                }
-            }, delaySeconds * 20L);
+        if (getConfig().getInt("delaySeconds") > 0) {
+            if (!player.hasPermission("finddeathlocation.tp.bypass")) {
+                int delaySeconds = getConfig().getInt("delaySeconds");
+                player.sendMessage(convertedLang("teleporting").replace("{DELAY}", Integer.toString(delaySeconds)));
+                getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
+                    public void run() {
+                        player.teleport(targetLocation);
+                    }
+                }, delaySeconds * 20L);
+            } else {
+                player.teleport(targetLocation);
+            }
         } else {
             player.teleport(targetLocation);
         }
@@ -285,7 +289,11 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             
             
             if (cooldownTime.containsKey(player)) {
-                player.sendMessage(ChatColor.RED + "You must wait for " + cooldownTime.get(player) + " seconds.");
+                if(getConfig().getInt("cooldownSeconds") - cooldownTime.get(player) < 0) {
+                    player.sendMessage(convertedLang("tpwait"));
+                } else {
+                    player.sendMessage(convertedLang("cooldown").replace("{COOLDOWN}", convertTime(cooldownTime.get(player))));
+                }
                 return true;
             }
 
@@ -302,7 +310,9 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                         return true;
                     } else {
                         teleportPlayer(player, player.getName());
-                        cooldown(player);
+                        if (getConfig().getInt("cooldownSeconds") > 0) {
+                            cooldown(player); 
+                        }
                         return true;
                     }
                 }
@@ -328,7 +338,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     }
     
     void cooldown(Player player) {
-        cooldownTime.put(player, getConfig().getInt("cooldownSeconds"));
+        cooldownTime.put(player, getConfig().getInt("cooldownSeconds") + getConfig().getInt("delaySeconds"));
         cooldownTask.put(player, new BukkitRunnable() {
                 public void run() {
                         cooldownTime.put(player, cooldownTime.get(player) - 1);
@@ -341,5 +351,45 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         });
        
         cooldownTask.get(player).runTaskTimer(this, 20, 20);
+    }
+    
+    String convertTime(int initSeconds) {
+        String init = "";
+        if ((initSeconds/86400) >= 1) {
+            int days = initSeconds/86400;
+            initSeconds = initSeconds%86400;
+            if (days > 1) {
+                init = init + " " + days + " Days";
+            } else {
+                init = init + " " + days + " Day";
+            }
+        }
+        if ((initSeconds/3600) >= 1) {
+            int hours = initSeconds/3600;
+            initSeconds = initSeconds%3600;
+            if (hours > 1) {
+                init = init + " " + hours + " Hours";
+            } else {
+                init = init + " " + hours + " Hour";
+            }
+        }
+        if ((initSeconds/60) >= 1) {
+            int minutes = initSeconds/60;
+            initSeconds = initSeconds%60;
+            if (minutes > 1) {
+                init = init + " " + minutes + " Minutes";
+            } else {
+                init = init + " " + minutes + " Minute";
+            }
+        }
+        if (initSeconds >= 1) {
+            if (initSeconds > 1) {
+                init = init + " " + initSeconds + " Seconds";
+            } else {
+                init = init + " " + initSeconds + " Second";
+            }
+        }
+        init = init.substring(1, init.length());
+        return init;
     }
 }
