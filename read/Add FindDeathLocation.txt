@@ -28,5 +28,12 @@ configurable language
 	teleportation cooldown
 	metrics for all
 multiple classes
-days, hours, minutes, seconds, language config
-save cooldown on logout
+	days, hours, minutes, seconds, language config
+*****save cooldown on logout
+configurable console log message
+list features and config on site
+gifs for site
+messages after teleport "Teleported to KevinNovaks death location"
+"Teleporting to KevinNovaks death location in 5 minutes"
+	link to item id's in config
+yaml code format on site

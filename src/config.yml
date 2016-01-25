@@ -3,6 +3,8 @@
 # The item which can be used to find your last death location
 # must be an item ID, by default 288, a feather
 # requires permission: finddeathlocation.item
+# A list of item IDs can be found here:
+# http://minecraft-ids.grahamedgecombe.com/
 # default: item: 288
 item: 288
 
@@ -14,7 +16,7 @@ leftClick: true
 rightClick: false
 
 # Should players be given the item when they respawn?
-# default: itemOnRespawn: false
+# default: itemOnRespawn: true
 itemOnRespawn: true
 
 # Should compasses point to players last death locations?
