@@ -27,3 +27,6 @@ command to give that item
 configurable language
 	teleportation cooldown
 	metrics for all
+multiple classes
+days, hours, minutes, seconds, language config
+save cooldown on logout

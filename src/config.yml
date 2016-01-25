@@ -15,7 +15,7 @@ rightClick: false
 
 # Should players be given the item when they respawn?
 # default: itemOnRespawn: false
-itemOnRespawn: false
+itemOnRespawn: true
 
 # Should compasses point to players last death locations?
 # If you would also like players to click with a compass for distance,
@@ -31,14 +31,14 @@ distance3D: false
 # The time, in seconds, to wait before teleporting to a players death location
 # can be bypassed with the permission finddeathlocation.tp.bypass
 # or set to 0 to disable completely
-# default: delaySeconds: 5
-delaySeconds: 5
+# default: delaySeconds: 0
+delaySeconds: 0
 
 # The time, in seconds, before a player can use /tpdeath or /tpdeath <player>
 # can be bypassed with the permission finddeathlocation.tp.bypass
 # or set to 0 to disable completely
-# default: cooldownSeconds: 3600
-cooldownSeconds: 3600
+# default: cooldownSeconds: 0
+cooldownSeconds: 0
 
 # When players teleport to a death location,
 # how many blocks above should they teleport?
@@ -71,6 +71,16 @@ anotherWorld: '&cYour death location is in another world!'
 tpWait: '&cYou are already teleporting!'
 noConsole: '&cConsole cannot run FindDeathLocation commands!'
 noLocation: '&cPlayer death location not found!'
+
+# Variable Language
+day: 'day'
+days: 'days'
+hour: 'hour'
+hours: 'hours'
+minute: 'minute'
+minutes: 'minutes'
+second: 'second'
+seconds: 'seconds'
 
 # Whether or not to collect data on plugin usage
 # Viewable at http://mcstats.org/plugin/FindDeathLocation

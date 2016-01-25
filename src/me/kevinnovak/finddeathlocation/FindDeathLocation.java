@@ -79,8 +79,8 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     public void onDisable() {
         // plugin is disabled
         info("[FindDeathLocation] Plugin Disabled!");
-    }
-
+    }   
+    
     // ======================
     // Saving Death Locations
     // ======================
@@ -271,7 +271,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             }
             
             // send that distance to the player
-            player.sendMessage(convertedLang("senddistance").replace("{DISTANCE}", Integer.toString(distanceToDeath)));
+            player.sendMessage(convertedLang("sendDistance").replace("{DISTANCE}", Integer.toString(distanceToDeath)));
         
         // otherwise tell the player their death is in another world
         } else {
@@ -471,9 +471,9 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             int days = initSeconds/86400;
             initSeconds = initSeconds%86400;
             if (days > 1) {
-                init = init + " " + days + " Days";
+                init = init + " " + days + " " + getConfig().getString("days");
             } else {
-                init = init + " " + days + " Day";
+                init = init + " " + days + " " + getConfig().getString("day");
             }
         }
         
@@ -482,9 +482,9 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             int hours = initSeconds/3600;
             initSeconds = initSeconds%3600;
             if (hours > 1) {
-                init = init + " " + hours + " Hours";
+                init = init + " " + hours + " " + getConfig().getString("hours");
             } else {
-                init = init + " " + hours + " Hour";
+                init = init + " " + hours + " " + getConfig().getString("hour");
             }
         }
         
@@ -493,18 +493,18 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             int minutes = initSeconds/60;
             initSeconds = initSeconds%60;
             if (minutes > 1) {
-                init = init + " " + minutes + " Minutes";
+                init = init + " " + minutes + " " + getConfig().getString("minutes");
             } else {
-                init = init + " " + minutes + " Minute";
+                init = init + " " + minutes + " " + getConfig().getString("minute");
             }
         }
         
         // seconds
         if (initSeconds >= 1) {
             if (initSeconds > 1) {
-                init = init + " " + initSeconds + " Seconds";
+                init = init + " " + initSeconds + " " + getConfig().getString("seconds");
             } else {
-                init = init + " " + initSeconds + " Second";
+                init = init + " " + initSeconds + " " + getConfig().getString("second");
             }
         }
         // remove the initial space
