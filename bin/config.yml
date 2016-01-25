@@ -22,6 +22,15 @@ itemNameRequired: true
 # default: itemName: '&6Death Feather'
 itemName: '&6Death Feather'
 
+# Should the item that is given upon death have lore?
+# default: itemLoreEnabled: true
+itemLoreEnabled: true
+
+# What should the items lore be?
+# Color codes are supported here
+# default: itemLore: '&3Left click to find your last death location'
+itemLore: '&3Left click to find your last death location'
+
 # Which mouse button should the above item use?
 # it is possible to use both here, if desired
 # default: leftClick: true

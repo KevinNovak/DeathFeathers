@@ -2,6 +2,7 @@ package me.kevinnovak.finddeathlocation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -54,6 +55,13 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         if (getConfig().getBoolean("itemNameEnabled") || getConfig().getBoolean("itemNameRequired")) {
             ItemMeta deathItemMeta = deathItem.getItemMeta();
             deathItemMeta.setDisplayName(convertedLang("itemName"));
+            deathItem.setItemMeta(deathItemMeta);
+        }
+        
+        // add lore to the death item if it is enabled in the config
+        if (getConfig().getBoolean("itemLoreEnabled") || getConfig().getBoolean("itemLoreRequired")) {
+            ItemMeta deathItemMeta = deathItem.getItemMeta();
+            deathItemMeta.setLore(Arrays.asList(convertedLang("itemLore")));
             deathItem.setItemMeta(deathItemMeta);
         }
         
