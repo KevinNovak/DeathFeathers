@@ -359,7 +359,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                         teleportPlayer(player, player.getName());
                         
                         // if cooldown in config, set the players cooldown
-                        if (getConfig().getInt("cooldownSeconds") > 0) {
+                        if (getConfig().getInt("cooldownSeconds") >= 0) {
                             cooldown(player); 
                         }
                         return true;
