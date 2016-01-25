@@ -55,7 +55,7 @@ consoleLog: true
 # Language
 # for senddistance, place the variable "{DISTANCE}" where you would like the distance
 # default: senddistance: '&7Your last death is &6{DISTANCE} &7blocks away.'
-senddistance: '&7Your last death is &6{DISTANCE} &7blocks away.'
+sendDistance: '&7Your last death is &6{DISTANCE} &7blocks away.'
 # for teleporting, place the variable "{DELAY}" where you would like the delay time
 # default: teleporting: '&7Teleporting in {DELAY} seconds...'
 teleporting: '&7Teleporting in {DELAY} seconds...'
@@ -64,13 +64,13 @@ teleporting: '&7Teleporting in {DELAY} seconds...'
 cooldown: '&7You must wait {COOLDOWN}.'
 # for deathlog, place the variables "{PLAYER}", "{LOCATION}", and "{WORLD}" where you'd like
 # default: deathlog: '{PLAYER} has died at {LOCATION} in {WORLD}.'
-deathlog: '&7{PLAYER} has died at &6{LOCATION} &7in {WORLD}.'
-notpermitted: '&cYou are not permitted to do this!'
-notdied: '&cYou have not yet died!'
-anotherworld: '&cYour death location is in another world!'
-tpwait: '&cYou are already teleporting!'
-noconsole: '&cConsole cannot run FindDeathLocation commands!'
-nolocation: '&cPlayer death location not found!'
+deathLog: '&7{PLAYER} has died at &6{LOCATION} &7in {WORLD}.'
+notPermitted: '&cYou are not permitted to do this!'
+notDied: '&cYou have not yet died!'
+anotherWorld: '&cYour death location is in another world!'
+tpWait: '&cYou are already teleporting!'
+noConsole: '&cConsole cannot run FindDeathLocation commands!'
+noLocation: '&cPlayer death location not found!'
 
 # Whether or not to collect data on plugin usage
 # Viewable at http://mcstats.org/plugin/FindDeathLocation
