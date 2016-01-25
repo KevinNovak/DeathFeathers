@@ -329,10 +329,12 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                 // run command
                 } else {
                     teleportPlayer(player, target);
-                    cooldown(player);
+                    if (getConfig().getInt("cooldownSeconds") > 0) {
+                        cooldown(player); 
+                    }
+                    return true;
                 }
-            }    
-            return true;
+            }
         }  
         return true;
     }
