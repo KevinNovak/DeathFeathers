@@ -178,9 +178,9 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                 
                 // otherwise grab the players death location
                 World world = getServer().getWorld(deathData.getString(playername + ".World"));
-                int xPos = Integer.parseInt(deathData.getString(playername + ".X"));
-                int yPos = Integer.parseInt(deathData.getString(playername + ".Y")) + getConfig().getInt("numBlocksAbove");
-                int zPos = Integer.parseInt(deathData.getString(playername + ".Z"));
+                int xPos = getCoodinate(playername, 'X');
+                int yPos = getCoodinate(playername, 'Y') + getConfig().getInt("numBlocksAbove");
+                int zPos = getCoodinate(playername, 'Z');
                 Location targetLocation = new Location(world, xPos, yPos, zPos);
                 
                 // set the players compass to death location
@@ -253,9 +253,9 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         if (world == player.getWorld()) {
             
             // grab the players death coodinates
-            int xPos = Integer.parseInt(deathData.getString(playername + ".X"));
-            int yPos = Integer.parseInt(deathData.getString(playername + ".Y"));
-            int zPos = Integer.parseInt(deathData.getString(playername + ".Z"));
+            int xPos = getCoodinate(playername, 'X');
+            int yPos = getCoodinate(playername, 'Y');
+            int zPos = getCoodinate(playername, 'Z');
             
             // grab the players current coodinates
             int pxPos = player.getLocation().getBlockX();
@@ -407,9 +407,9 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         
         // grabs the provide targets death location
         World world = getServer().getWorld(deathData.getString(target + ".World"));
-        int xPos = Integer.parseInt(deathData.getString(target + ".X"));
-        int yPos = Integer.parseInt(deathData.getString(target + ".Y")) + getConfig().getInt("numBlocksAbove");
-        int zPos = Integer.parseInt(deathData.getString(target + ".Z"));
+        int xPos = getCoodinate(target, 'X');
+        int yPos = getCoodinate(target, 'Y') + getConfig().getInt("numBlocksAbove");
+        int zPos = getCoodinate(target, 'Z');
         Location targetLocation = new Location(world, xPos, yPos, zPos);
         
         // delay teleportation if configured so
@@ -526,5 +526,12 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     // sends an info string to the console
     void info(String toConsole) {
         Bukkit.getServer().getLogger().info(toConsole);
+    }
+    
+    // =========================
+    // Get Coodinate
+    // =========================
+    int getCoodinate(String player, char coodinate) {
+        return Integer.parseInt(deathData.getString(player + "." + coodinate));
     }
 }
