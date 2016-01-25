@@ -61,16 +61,16 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             try {
                 MetricsLite metrics = new MetricsLite(this);
                 metrics.start();
-                Bukkit.getServer().getLogger().info("[FindDeathLocation] Metrics Enabled!");
+                info("[FindDeathLocation] Metrics Enabled!");
             } catch (IOException e) {
-                Bukkit.getServer().getLogger().info("[FindDeathLocation] Failed to Start Metrics.");
+                info("[FindDeathLocation] Failed to Start Metrics.");
             }
         } else {
-            Bukkit.getServer().getLogger().info("[FindDeathLocation] Metrics Disabled.");
+            info("[FindDeathLocation] Metrics Disabled.");
         }
         
         // plugin is enabled
-        Bukkit.getServer().getLogger().info("[FindDeathLocation] Plugin Enabled!");
+        info("[FindDeathLocation] Plugin Enabled!");
     }
   
     // ======================
@@ -78,7 +78,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     // ======================
     public void onDisable() {
         // plugin is disabled
-        Bukkit.getServer().getLogger().info("[FindDeathLocation] Plugin Disabled!");
+        info("[FindDeathLocation] Plugin Disabled!");
     }
 
     // ======================
@@ -111,7 +111,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             
             // sending log to console
             if (getConfig().getBoolean("consoleLog")) {
-                Bukkit.getServer().getLogger().info("[FindDeathLocation] " + player.getName() + " has died at " + location + " in " + player.getLocation().getWorld().getName() + ".");
+                info("[FindDeathLocation] " + player.getName() + " has died at " + location + " in " + player.getLocation().getWorld().getName() + ".");
             }
             
             // sending log to players with permissions
@@ -518,5 +518,13 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     // converts string in config, to a string with colors
     String convertedLang(String toConvert) {
         return ChatColor.translateAlternateColorCodes('&', getConfig().getString(toConvert));
+    }
+    
+    // =========================
+    // Info
+    // =========================
+    // sends an info string to the console
+    void info(String toConsole) {
+        Bukkit.getServer().getLogger().info(toConsole);
     }
 }
