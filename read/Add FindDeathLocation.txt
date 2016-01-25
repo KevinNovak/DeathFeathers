@@ -5,7 +5,7 @@ ignore case when searching for players
 	optional time delay for teleport with bypass permission
 	configure for right and/or left click
 kit-ish thing that give you the item
-item must have a special config name "&bDeath Feather"
+	item must have a special config name "&bDeath Feather"
 finddeathlocation help
 better organizing death files
 	metrics
@@ -29,7 +29,8 @@ configurable language
 	metrics for all
 multiple classes
 	days, hours, minutes, seconds, language config
-*****save cooldown on logout
+	save cooldown on logout
+save cooldown on restart
 configurable console log message
 list features and config on site
 gifs for site
@@ -38,7 +39,7 @@ messages after teleport "Teleported to KevinNovaks death location"
 	link to item id's in config
 yaml code format on site
 configurable lore for respawn item
-configurable name for respawn item
+	configurable name for respawn item
 sign shop to buy a death item
 	does teleporting without a cooldown still show "You are already teleporting"?
 function, Location deathLocation(Player player) {}

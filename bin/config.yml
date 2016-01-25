@@ -8,6 +8,20 @@
 # default: item: 288
 item: 288
 
+# Should the item that is given upon death be named?
+# default: itemNameEnabled: true
+itemNameEnabled: true
+
+# Should the named version of the item be required,
+# in order to show the death location distance?
+# default: itemNameRequired: true
+itemNameRequired: true
+
+# What should the item be named?
+# Color codes are supported here
+# default: itemName: '&6Death Feather'
+itemName: '&6Death Feather'
+
 # Which mouse button should the above item use?
 # it is possible to use both here, if desired
 # default: leftClick: true
@@ -33,14 +47,14 @@ distance3D: false
 # The time, in seconds, to wait before teleporting to a players death location
 # can be bypassed with the permission finddeathlocation.tp.bypass
 # or set to 0 to disable completely
-# default: delaySeconds: 0
-delaySeconds: 0
+# default: delaySeconds: 5
+delaySeconds: 5
 
 # The time, in seconds, before a player can use /tpdeath or /tpdeath <player>
 # can be bypassed with the permission finddeathlocation.tp.bypass
 # or set to 0 to disable completely
-# default: cooldownSeconds: 0
-cooldownSeconds: 0
+# default: cooldownSeconds: 3600
+cooldownSeconds: 3600
 
 # When players teleport to a death location,
 # how many blocks above should they teleport?

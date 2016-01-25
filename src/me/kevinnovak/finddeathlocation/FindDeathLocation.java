@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -36,25 +37,32 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     public FileConfiguration deathData = YamlConfiguration.loadConfiguration(deathsFile);
     
     // load the item to listen for
-    ItemStack deathItem = new ItemStack(getConfig().getInt("item")); 
+    ItemStack deathItem = new ItemStack(getConfig().getInt("item"));
     
     // cooldown hashmaps
-    private HashMap<Player, Integer> cooldownTime;
-    private HashMap<Player, BukkitRunnable> cooldownTask;
+    private HashMap<String, Integer> cooldownTime;
+    private HashMap<String, BukkitRunnable> cooldownTask;
     
     // ======================
     // Enable
     // ======================
-    public void onEnable() {
+    public void onEnable() {  
         // save default config file if it doesnt exist
         saveDefaultConfig();
+        
+        // name the death item if it is enabled in the config
+        if (getConfig().getBoolean("itemNameEnabled") || getConfig().getBoolean("itemNameRequired")) {
+            ItemMeta deathItemMeta = deathItem.getItemMeta();
+            deathItemMeta.setDisplayName(convertedLang("itemName"));
+            deathItem.setItemMeta(deathItemMeta);
+        }
         
         // register the listeners
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
         
         // prepare the cooldown hasmaps
-        cooldownTime = new HashMap<Player, Integer>();
-        cooldownTask = new HashMap<Player, BukkitRunnable>();
+        cooldownTime = new HashMap<String, Integer>();
+        cooldownTask = new HashMap<String, BukkitRunnable>();
         
         // start metrics
         if (getConfig().getBoolean("metrics")) {
@@ -129,7 +137,6 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     @EventHandler
     // when a player respawns...
     public void onRespawn(PlayerRespawnEvent e) {
-        
         // give player the respawn item
         if (getConfig().getBoolean("itemOnRespawn")) {
             e.getPlayer().getInventory().addItem(deathItem);
@@ -204,6 +211,20 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
                 if (player.getItemInHand().getType() == deathItem.getType()) {
                     
+                    // if item name is required
+                    if(getConfig().getBoolean("itemNameRequired")) {  
+                        
+                        // if item does not have a display name
+                        if(player.getItemInHand().getItemMeta().getDisplayName() == null) {
+                            return;
+                        }
+                        
+                        // if items display name is not the required one
+                        if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(convertedLang("itemName")))) {
+                            return;
+                        }   
+                    }
+                    
                     // check for permission
                     if (!player.hasPermission("finddeathlocation.item")) {
                         player.sendMessage(convertedLang("notPermitted"));
@@ -220,6 +241,20 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         if (getConfig().getBoolean("rightClick")) {
             if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
                 if (player.getItemInHand().getType() == deathItem.getType()) {
+                    
+                    // if item name is required
+                    if(getConfig().getBoolean("itemNameRequired")) {  
+                        
+                        // if item does not have a display name
+                        if(player.getItemInHand().getItemMeta().getDisplayName() == null) {
+                            return;
+                        }
+                        
+                        // if items display name is not the required one
+                        if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(convertedLang("itemName")))) {
+                            return;
+                        }   
+                    }
                     
                     // check for permission
                     if (!player.hasPermission("finddeathlocation.item")) {
@@ -294,6 +329,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         
         // otherwise the command sender is a player
         final Player player = (Player) sender;
+        final String playername = player.getName();
         
         // ======================
         // /finddeath
@@ -319,10 +355,10 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         if(cmd.getName().equalsIgnoreCase("tpdeath")) {
             
             // if the player is still in cooldown
-            if (cooldownTime.containsKey(player)) {
+            if (cooldownTime.containsKey(player.getName())) {
                 
                 // if the player is still in waiting to teleport
-                if(getConfig().getInt("cooldownSeconds") - cooldownTime.get(player) < 0) {
+                if(getConfig().getInt("cooldownSeconds") - cooldownTime.get(playername) < 0) {
                     
                     // send a message telling them theyre already teleporting
                     player.sendMessage(convertedLang("tpWait"));
@@ -331,7 +367,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                 } else {
                     
                     // send a message telling them the time to wait
-                    player.sendMessage(convertedLang("cooldown").replace("{COOLDOWN}", convertTime(cooldownTime.get(player))));
+                    player.sendMessage(convertedLang("cooldown").replace("{COOLDOWN}", convertTime(cooldownTime.get(playername))));
                 }
                 return true;
             }
@@ -437,27 +473,29 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     // Cooldown
     // =========================
     void cooldown(Player player) {
+        // get player name
+        String playername = player.getName();
         
         // put the player in the hash table with delay time
-        cooldownTime.put(player, getConfig().getInt("cooldownSeconds") + getConfig().getInt("delaySeconds"));
+        cooldownTime.put(playername, getConfig().getInt("cooldownSeconds") + getConfig().getInt("delaySeconds"));
         
-        cooldownTask.put(player, new BukkitRunnable() {
+        cooldownTask.put(playername, new BukkitRunnable() {
                 public void run() {
                     
                         // subtract 1 from cooldown time every second
-                        cooldownTime.put(player, cooldownTime.get(player) - 1);
+                        cooldownTime.put(playername, cooldownTime.get(playername) - 1);
                         
                         // if cooldown time reaches 0, then remove the player from the hash table
-                        if (cooldownTime.get(player) == 0) {
-                                cooldownTime.remove(player);
-                                cooldownTask.remove(player);
+                        if (cooldownTime.get(playername) == 0) {
+                                cooldownTime.remove(playername);
+                                cooldownTask.remove(playername);
                                 cancel();
                         }
                 }
         });
        
         // run this every 20 ticks, or 1 second
-        cooldownTask.get(player).runTaskTimer(this, 20, 20);
+        cooldownTask.get(playername).runTaskTimer(this, 20, 20);
     }
     
     // ================================
