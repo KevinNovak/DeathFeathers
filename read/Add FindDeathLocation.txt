@@ -38,8 +38,9 @@ messages after teleport "Teleported to KevinNovaks death location"
 "Teleporting to KevinNovaks death location in 5 minutes"
 	link to item id's in config
 yaml code format on site
-configurable lore for respawn item
+	configurable lore for respawn item
 	configurable name for respawn item
 sign shop to buy a death item
 	does teleporting without a cooldown still show "You are already teleporting"?
 function, Location deathLocation(Player player) {}
+add link to spigot in config file

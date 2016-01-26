@@ -1,5 +1,5 @@
 name: FindDeathLocation
-version: 1.4.1
+version: 1.4.2
 main: me.kevinnovak.finddeathlocation.FindDeathLocation
 author: KevinNovak
 description: Finds players death location!

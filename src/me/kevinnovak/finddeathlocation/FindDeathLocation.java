@@ -95,7 +95,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     public void onDisable() {
         // plugin is disabled
         info("[FindDeathLocation] Plugin Disabled!");
-    }   
+    }
     
     // ======================
     // Saving Death Locations
@@ -402,9 +402,11 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                         // teleport the player to their own death location
                         teleportPlayer(player, player.getName());
                         
-                        // if cooldown in config, set the players cooldown
-                        if (getConfig().getInt("cooldownSeconds") >= 0) {
-                            cooldown(player); 
+                        if (!player.hasPermission("finddeathlocation.tp.bypass")) {
+                            // if cooldown in config, set the players cooldown
+                            if (getConfig().getInt("cooldownSeconds") > 0) {
+                                cooldown(player); 
+                            }
                         }
                         return true;
                     }
@@ -432,9 +434,11 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                     // teleport player to targets death location
                     teleportPlayer(player, target);
                     
-                    // if cooldown in config, set the players cooldown
-                    if (getConfig().getInt("cooldownSeconds") > 0) {
-                        cooldown(player); 
+                    if (!player.hasPermission("finddeathlocation.tp.bypass")) {
+                        // if cooldown in config, set the players cooldown
+                        if (getConfig().getInt("cooldownSeconds") > 0) {
+                            cooldown(player); 
+                        }
                     }
                     return true;
                 }
