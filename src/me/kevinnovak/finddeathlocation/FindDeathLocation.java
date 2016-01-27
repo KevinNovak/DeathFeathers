@@ -243,6 +243,26 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                         sendDistance(player);
                     }
                     if(getConfig().getBoolean("leftClickParticles")) {
+                        // if item name is required
+                        if(getConfig().getBoolean("itemNameRequired")) {  
+                            
+                            // if item does not have a display name
+                            if(player.getItemInHand().getItemMeta().getDisplayName() == null) {
+                                return;
+                            }
+                            
+                            // if items display name is not the required one
+                            if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(convertedLang("itemName")))) {
+                                return;
+                            }   
+                        }
+                        
+                        // check for permission
+                        if (!player.hasPermission("finddeathlocation.item")) {
+                            player.sendMessage(convertedLang("notPermitted"));
+                            return;
+                        }
+                        
                         sendParticles(player);
                     }
                 }
@@ -278,6 +298,26 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                         sendDistance(player);
                     }
                     if(getConfig().getBoolean("rightClickParticles")) {
+                        // if item name is required
+                        if(getConfig().getBoolean("itemNameRequired")) {  
+                            
+                            // if item does not have a display name
+                            if(player.getItemInHand().getItemMeta().getDisplayName() == null) {
+                                return;
+                            }
+                            
+                            // if items display name is not the required one
+                            if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(convertedLang("itemName")))) {
+                                return;
+                            }   
+                        }
+                        
+                        // check for permission
+                        if (!player.hasPermission("finddeathlocation.item")) {
+                            player.sendMessage(convertedLang("notPermitted"));
+                            return;
+                        }
+                        
                         sendParticles(player);
                     }
                 }

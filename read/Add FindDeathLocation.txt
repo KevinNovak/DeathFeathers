@@ -46,3 +46,4 @@ function, Location deathLocation(Player player) {}
 add link to spigot in config file (and for others)
 	check compass doesnt apply unless configured so
 sync up bukkit and spigot
+error with op tpdeath, then deop, then try again
