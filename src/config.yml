@@ -47,6 +47,13 @@ rightClick: false
 leftClickParticles: false
 rightClickParticles: true
 
+# The distance away from the player to start and stop showing particles
+# Stop distance must be larger than start distance
+# default: particleStartDistance: 1
+# default: particleStopDistance: 12
+particleStartDistance: 1
+particleStopDistance: 12
+
 # Should players be given the item when they respawn?
 # default: itemOnRespawn: true
 itemOnRespawn: true

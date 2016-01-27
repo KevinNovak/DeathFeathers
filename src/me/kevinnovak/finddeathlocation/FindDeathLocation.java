@@ -400,12 +400,12 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             int distanceToDeath = (int) Math.sqrt(((xPos - pxPos)*(xPos - pxPos)) + ((zPos - pzPos)*(zPos - pzPos)));
             
             if (distanceToDeath != 0) {
-                int pathLength = 12;
-                if (distanceToDeath < 12) {
+                int pathLength = getConfig().getInt("particleStopDistance");
+                if (distanceToDeath < pathLength) {
                     pathLength = distanceToDeath;
                 }
                 double m = (zPos - pzPos)/(xPos - pxPos);
-                for (int i = 3; i<pathLength; i++ ) {
+                for (int i = getConfig().getInt("particleStartDistance"); i<pathLength; i++ ) {
                     double d = i;
                     double x = 0;
                     if (pxPos < xPos) {
