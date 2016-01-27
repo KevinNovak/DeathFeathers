@@ -43,4 +43,6 @@ yaml code format on site
 sign shop to buy a death item
 	does teleporting without a cooldown still show "You are already teleporting"?
 function, Location deathLocation(Player player) {}
-add link to spigot in config file
+add link to spigot in config file (and for others)
+	check compass doesnt apply unless configured so
+sync up bukkit and spigot
