@@ -31,12 +31,19 @@ itemLoreEnabled: true
 # default: itemLore: '&3Left click to find your last death location'
 itemLore: '&3Left click to find your last death location'
 
-# Which mouse button should the above item use?
-# it is possible to use both here, if desired
+# Which mouse button should the above item use for finding distance?
+# it is possible to use both or neither here, if desired
 # default: leftClick: true
 # default: rightClick: false
 leftClick: true
 rightClick: false
+
+# Which mouse button should the above item use for showing particles paths?
+# it is possible to use both or neither here, if desired
+# default: leftClickParticles: false
+# default: rightClickParticles: true
+leftClickParticles: false
+rightClickParticles: true
 
 # Should players be given the item when they respawn?
 # default: itemOnRespawn: true

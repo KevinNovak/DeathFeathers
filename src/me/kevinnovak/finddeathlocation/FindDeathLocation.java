@@ -215,65 +215,71 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         Action action = event.getAction();
         
         // if player is left clicking with the death item
-        if (getConfig().getBoolean("leftClick")) {
+        if (getConfig().getBoolean("leftClick") || getConfig().getBoolean("leftClickParticles")) {
             if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
                 if (player.getItemInHand().getType() == deathItem.getType()) {
-                    
-                    // if item name is required
-                    if(getConfig().getBoolean("itemNameRequired")) {  
-                        
-                        // if item does not have a display name
-                        if(player.getItemInHand().getItemMeta().getDisplayName() == null) {
-                            return;
+                    if(getConfig().getBoolean("leftClick")) {
+                        // if item name is required
+                        if(getConfig().getBoolean("itemNameRequired")) {  
+                            
+                            // if item does not have a display name
+                            if(player.getItemInHand().getItemMeta().getDisplayName() == null) {
+                                return;
+                            }
+                            
+                            // if items display name is not the required one
+                            if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(convertedLang("itemName")))) {
+                                return;
+                            }   
                         }
                         
-                        // if items display name is not the required one
-                        if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(convertedLang("itemName")))) {
+                        // check for permission
+                        if (!player.hasPermission("finddeathlocation.item")) {
+                            player.sendMessage(convertedLang("notPermitted"));
                             return;
-                        }   
-                    }
+                        }
                     
-                    // check for permission
-                    if (!player.hasPermission("finddeathlocation.item")) {
-                        player.sendMessage(convertedLang("notPermitted"));
-                        return;
+                        // send the distance to the player
+                        sendDistance(player);
                     }
-                    
-                    // send the distance to the player
-                    sendDistance(player);
-                    sendParticles(player);
+                    if(getConfig().getBoolean("leftClickParticles")) {
+                        sendParticles(player);
+                    }
                 }
             }
         }
         
      // if player is right clicking with the death item
-        if (getConfig().getBoolean("rightClick")) {
+        if (getConfig().getBoolean("rightClick") || getConfig().getBoolean("rightClickParticles")) {
             if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
                 if (player.getItemInHand().getType() == deathItem.getType()) {
-                    
-                    // if item name is required
-                    if(getConfig().getBoolean("itemNameRequired")) {  
-                        
-                        // if item does not have a display name
-                        if(player.getItemInHand().getItemMeta().getDisplayName() == null) {
-                            return;
+                    if(getConfig().getBoolean("rightClick")) {
+                        // if item name is required
+                        if(getConfig().getBoolean("itemNameRequired")) {  
+                            
+                            // if item does not have a display name
+                            if(player.getItemInHand().getItemMeta().getDisplayName() == null) {
+                                return;
+                            }
+                            
+                            // if items display name is not the required one
+                            if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(convertedLang("itemName")))) {
+                                return;
+                            }   
                         }
                         
-                        // if items display name is not the required one
-                        if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(convertedLang("itemName")))) {
+                        // check for permission
+                        if (!player.hasPermission("finddeathlocation.item")) {
+                            player.sendMessage(convertedLang("notPermitted"));
                             return;
-                        }   
-                    }
+                        }
                     
-                    // check for permission
-                    if (!player.hasPermission("finddeathlocation.item")) {
-                        player.sendMessage(convertedLang("notPermitted"));
-                        return;
+                        // send the distance to the player
+                        sendDistance(player);
                     }
-                    
-                    // send the distance to the player
-                    sendDistance(player);
-                    sendParticles(player);
+                    if(getConfig().getBoolean("rightClickParticles")) {
+                        sendParticles(player);
+                    }
                 }
             }
         }
@@ -329,7 +335,17 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     // ======================
     void sendParticles(Player player) {
         String playername = player.getName();
+        
+        // if the player has not died, let them know
+        if (deathData.getString(playername) == null) {
+            player.sendMessage(convertedLang("notDied"));
+            return;
+        }
+        
+        // otherwise grab the world the player is in
         World world = getServer().getWorld(deathData.getString(playername + ".World"));
+        
+        // if their death world is the same world they are in
         if (world == player.getWorld()) {
             int xPos = getCoodinate(playername, 'X');
             int zPos = getCoodinate(playername, 'Z');
@@ -339,12 +355,12 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             int distanceToDeath = (int) Math.sqrt(((xPos - pxPos)*(xPos - pxPos)) + ((zPos - pzPos)*(zPos - pzPos)));
             
             if (distanceToDeath != 0) {
-                int pathLength = 9;
-                if (distanceToDeath < 9) {
+                int pathLength = 12;
+                if (distanceToDeath < 12) {
                     pathLength = distanceToDeath;
                 }
                 double m = (zPos - pzPos)/(xPos - pxPos);
-                for (int i = 1; i<pathLength; i++ ) {
+                for (int i = 3; i<pathLength; i++ ) {
                     double d = i;
                     double x = 0;
                     if (pxPos < xPos) {
@@ -354,9 +370,11 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                     }
                     double z = (m*(x - pxPos)) + pzPos;
                     Location test = new Location(world, x,player.getLocation().getY() + 1,z);
-                    ParticleEffect.REDSTONE.display(0, 0, 0, 10, 10, test, 45);
+                    ParticleEffect.REDSTONE.display(0, 0, 0, 10, 10, test, 5000);
                 }
             }
+        } else {
+            player.sendMessage(convertedLang("anotherWorld"));
         }
     }
 
