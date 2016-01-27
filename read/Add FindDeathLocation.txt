@@ -47,3 +47,7 @@ add link to spigot in config file (and for others)
 	check compass doesnt apply unless configured so
 sync up bukkit and spigot
 error with op tpdeath, then deop, then try again
+show particles for only the player
+clean up, simplify code
+	multiline lore "right click to see path"
+variable particle start and end length

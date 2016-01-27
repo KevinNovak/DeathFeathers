@@ -29,7 +29,9 @@ itemLoreEnabled: true
 # What should the items lore be?
 # Color codes are supported here
 # default: itemLore: '&3Left click to find your last death location'
-itemLore: '&3Left click to find your last death location'
+itemLore:
+- '&3Left click to show distance'
+- '&3Right click to show path'
 
 # Which mouse button should the above item use for finding distance?
 # it is possible to use both or neither here, if desired

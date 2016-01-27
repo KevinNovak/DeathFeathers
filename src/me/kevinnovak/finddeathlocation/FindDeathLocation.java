@@ -2,8 +2,9 @@ package me.kevinnovak.finddeathlocation;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -61,7 +62,11 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
         // add lore to the death item if it is enabled in the config
         if (getConfig().getBoolean("itemLoreEnabled") || getConfig().getBoolean("itemLoreRequired")) {
             ItemMeta deathItemMeta = deathItem.getItemMeta();
-            deathItemMeta.setLore(Arrays.asList(convertedLang("itemLore")));
+            
+            List<String> list = getConfig().getStringList("itemLore");
+            List<String> convertedList = convertedLang(list);
+            deathItemMeta.setLore(convertedList);
+
             deathItem.setItemMeta(deathItemMeta);
         }
         
@@ -664,6 +669,14 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
     // converts string in config, to a string with colors
     String convertedLang(String toConvert) {
         return ChatColor.translateAlternateColorCodes('&', getConfig().getString(toConvert));
+    }
+    List<String> convertedLang(List<String> toConvert) {
+        List<String> translatedColors = new ArrayList<String>();
+        for (String stringToTranslate: toConvert){
+            translatedColors.add(ChatColor.translateAlternateColorCodes('&',stringToTranslate));
+             
+        }
+        return translatedColors;
     }
     
     // =========================
