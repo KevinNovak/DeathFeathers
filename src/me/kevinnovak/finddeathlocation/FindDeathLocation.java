@@ -317,18 +317,24 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             player.sendMessage(convertedLang("sendDistance").replace("{DISTANCE}", Integer.toString(distanceToDeath)));
             
             // particle effects
-            double m = (zPos - pzPos)/(xPos - pxPos);
-            for (int i = 1; i<9; i++ ) {
-                double d = i;
-                double x = 0;
-                if (pxPos < xPos) {
-                    x = (double) (pxPos + (d/(Math.sqrt(1 + (m * m)))));
-                } else if (pxPos > xPos) {
-                    x = (double) (pxPos - (d/(Math.sqrt(1 + (m * m)))));
+            if (distanceToDeath != 0) {
+                int pathLength = 9;
+                if (distanceToDeath < 9) {
+                    pathLength = distanceToDeath;
                 }
-                double z = (m*(x - pxPos)) + pzPos;
-                Location test = new Location(player.getLocation().getWorld(), x,player.getLocation().getY() + 1,z);
-                ParticleEffect.REDSTONE.display(0, 0, 0, 10, 10, test, 45);
+                double m = (zPos - pzPos)/(xPos - pxPos);
+                for (int i = 1; i<pathLength; i++ ) {
+                    double d = i;
+                    double x = 0;
+                    if (pxPos < xPos) {
+                        x = (double) (pxPos + (d/(Math.sqrt(1 + (m * m)))));
+                    } else if (pxPos > xPos) {
+                        x = (double) (pxPos - (d/(Math.sqrt(1 + (m * m)))));
+                    }
+                    double z = (m*(x - pxPos)) + pzPos;
+                    Location test = new Location(player.getLocation().getWorld(), x,player.getLocation().getY() + 1,z);
+                    ParticleEffect.REDSTONE.display(0, 0, 0, 10, 10, test, 45);
+                }
             }
             
         // otherwise tell the player their death is in another world
