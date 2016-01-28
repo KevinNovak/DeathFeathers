@@ -1,4 +1,5 @@
 # Configuration file for FindDeathLocation
+# https://www.spigotmc.org/resources/finddeathlocation.17361/
 
 # The item which can be used to find your last death location
 # must be an item ID, by default 288, a feather
@@ -28,7 +29,9 @@ itemLoreEnabled: true
 
 # What should the items lore be?
 # Color codes are supported here
-# default: itemLore: '&3Left click to find your last death location'
+# default: itemLore:
+#- '&3Left click to show distance'
+#- '&3Right click to show path'
 itemLore:
 - '&3Left click to show distance'
 - '&3Right click to show path'
@@ -48,10 +51,11 @@ leftClickParticles: false
 rightClickParticles: true
 
 # The distance away from the player to start and stop showing particles
+# Distance is in number of blocks
 # Stop distance must be larger than start distance
-# default: particleStartDistance: 1
+# default: particleStartDistance: 0
 # default: particleStopDistance: 12
-particleStartDistance: 1
+particleStartDistance: 0
 particleStopDistance: 12
 
 # Should players be given the item when they respawn?

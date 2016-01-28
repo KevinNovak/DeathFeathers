@@ -400,12 +400,12 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
             int distanceToDeath = (int) Math.sqrt(((xPos - pxPos)*(xPos - pxPos)) + ((zPos - pzPos)*(zPos - pzPos)));
             
             if (distanceToDeath != 0) {
-                int pathLength = getConfig().getInt("particleStopDistance");
+                double pathLength = getConfig().getInt("particleStopDistance");
                 if (distanceToDeath < pathLength) {
                     pathLength = distanceToDeath;
                 }
                 double m = (zPos - pzPos)/(xPos - pxPos);
-                for (int i = getConfig().getInt("particleStartDistance"); i<pathLength; i++ ) {
+                for (double i = getConfig().getInt("particleStartDistance"); i<pathLength; i = i + 0.25) {
                     double d = i;
                     double x = 0;
                     if (pxPos < xPos) {
@@ -415,7 +415,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                     }
                     double z = (m*(x - pxPos)) + pzPos;
                     Location test = new Location(world, x,player.getLocation().getY() + 1,z);
-                    ParticleEffect.REDSTONE.display(0, 0, 0, 10, 10, test, 5000);
+                    ParticleEffect.REDSTONE.display(0, 0, 0, 10, 1, test, 5000);
                 }
             }
         } else {

@@ -50,4 +50,6 @@ error with op tpdeath, then deop, then try again
 show particles for only the player
 clean up, simplify code
 	multiline lore "right click to see path"
-variable particle start and end length
+	variable particle start and end length
+white particles config? less particles?
+	fix default: itemLore: in config
