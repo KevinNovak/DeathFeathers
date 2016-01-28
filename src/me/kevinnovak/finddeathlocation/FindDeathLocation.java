@@ -415,7 +415,7 @@ public class FindDeathLocation extends JavaPlugin implements Listener{
                     }
                     double z = (m*(x - pxPos)) + pzPos;
                     Location test = new Location(world, x,player.getLocation().getY() + 1,z);
-                    ParticleEffect.REDSTONE.display(0, 0, 0, 10, 1, test, 5000);
+                    ParticleEffect.REDSTONE.display(0, 0, 0, 10, 1, test, player);
                 }
             }
         } else {
