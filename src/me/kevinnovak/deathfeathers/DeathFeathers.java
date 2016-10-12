@@ -1,4 +1,4 @@
-package me.kevinnovak.finddeathlocation;
+package me.kevinnovak.deathfeathers;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 // suppress the item id warnings
 @SuppressWarnings("deprecation")
 
-public class FindDeathLocation extends JavaPlugin implements Listener{
+public class DeathFeathers extends JavaPlugin implements Listener{
     
     // create deaths.yml file
     public File deathsFile = new File(getDataFolder()+"/deaths.yml");

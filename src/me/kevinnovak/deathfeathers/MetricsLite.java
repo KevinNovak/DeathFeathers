@@ -26,7 +26,7 @@
  * either expressed or implied, of anybody else.
  */
 
-package me.kevinnovak.finddeathlocation;
+package me.kevinnovak.deathfeathers;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
