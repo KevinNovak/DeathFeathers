@@ -1,6 +1,6 @@
-name: FindDeathLocation
-version: 1.5.5
-main: me.kevinnovak.finddeathlocation1x10.FindDeathLocation
+name: DeathFeathers
+version: 1.0.0
+main: me.kevinnovak.deathfeathers.DeathFeathers
 author: KevinNovak
 description: Finds players death location!
 
@@ -13,21 +13,21 @@ commands:
         description: Teleports to a players death location.
         
 permissions:
-    finddeathlocation.item:
+    deathfeathers.item:
         description: Use the find death item.
         default: op
-    finddeathlocation.command:
+    deathfeathers.command:
         description: Use the find death command.
         default: op
-    finddeathlocation.tp:
+    deathfeathers.tp:
         description: Teleport to your death location.
         default: op
-    finddeathlocation.tp.others:
+    deathfeathers.tp.others:
         description: Teleport to a players death location.
         default: op
-    finddeathlocation.tp.bypass:
+    deathfeathers.tp.bypass:
         description: Bypass the teleportation delay.
         default: op
-    finddeathlocation.log:
+    deathfeathers.log:
         description: See death locations when players die.
         default: false

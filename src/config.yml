@@ -1,9 +1,8 @@
-# Configuration file for FindDeathLocation
-# https://www.spigotmc.org/resources/finddeathlocation.17361/
+# Configuration file for DeathFeathers
 
 # The item which can be used to find your last death location
 # must be an item ID, by default 288, a feather
-# requires permission: finddeathlocation.item
+# requires permission: deathfeathers.item
 # A list of item IDs can be found here:
 # http://minecraft-ids.grahamedgecombe.com/
 # default: item: 288
@@ -74,13 +73,13 @@ compassDirection: false
 distance3D: false
 
 # The time, in seconds, to wait before teleporting to a players death location
-# can be bypassed with the permission finddeathlocation.tp.bypass
+# can be bypassed with the permission deathfeathers.tp.bypass
 # or set to 0 to disable completely
 # default: delaySeconds: 5
 delaySeconds: 5
 
 # The time, in seconds, before a player can use /tpdeath or /tpdeath <player>
-# can be bypassed with the permission finddeathlocation.tp.bypass
+# can be bypassed with the permission deathfeathers.tp.bypass
 # or set to 0 to disable completely
 # default: cooldownSeconds: 3600
 cooldownSeconds: 3600
@@ -114,7 +113,7 @@ notPermitted: '&cYou are not permitted to do this!'
 notDied: '&cYou have not yet died!'
 anotherWorld: '&cYour death location is in another world!'
 tpWait: '&cYou are already teleporting!'
-noConsole: '&cConsole cannot run FindDeathLocation commands!'
+noConsole: '&cConsole cannot run DeathFeathers commands!'
 noLocation: '&cPlayer death location not found!'
 
 # Variable Language
@@ -128,6 +127,6 @@ second: 'second'
 seconds: 'seconds'
 
 # Whether or not to collect data on plugin usage
-# Viewable at http://mcstats.org/plugin/FindDeathLocation
+# Viewable at http://mcstats.org/plugin/DeathFeathers
 # default: metrics: true
 metrics: true

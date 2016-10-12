@@ -82,16 +82,16 @@ public class DeathFeathers extends JavaPlugin implements Listener{
             try {
                 MetricsLite metrics = new MetricsLite(this);
                 metrics.start();
-                info("[FindDeathLocation] Metrics Enabled!");
+                info("[DeathFeathers] Metrics Enabled!");
             } catch (IOException e) {
-                info("[FindDeathLocation] Failed to Start Metrics.");
+                info("[DeathFeathers] Failed to Start Metrics.");
             }
         } else {
-            info("[FindDeathLocation] Metrics Disabled.");
+            info("[DeathFeathers] Metrics Disabled.");
         }
         
         // plugin is enabled
-        info("[FindDeathLocation] Plugin Enabled!");
+        info("[DeathFeathers] Plugin Enabled!");
     }
   
     // ======================
@@ -99,7 +99,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
     // ======================
     public void onDisable() {
         // plugin is disabled
-        info("[FindDeathLocation] Plugin Disabled!");
+        info("[DeathFeathers] Plugin Disabled!");
     }
     
     // ======================
@@ -132,12 +132,12 @@ public class DeathFeathers extends JavaPlugin implements Listener{
             
             // sending log to console
             if (getConfig().getBoolean("consoleLog")) {
-                info("[FindDeathLocation] " + player.getName() + " has died at " + location + " in " + player.getLocation().getWorld().getName() + ".");
+                info("[DeathFeathers] " + player.getName() + " has died at " + location + " in " + player.getLocation().getWorld().getName() + ".");
             }
             
             // sending log to players with permissions
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                if (onlinePlayer.hasPermission("finddeathlocation.log")) {
+                if (onlinePlayer.hasPermission("deathfeathers.log")) {
                     onlinePlayer.sendMessage(deathLog);
                 }
             }
@@ -239,7 +239,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                         }
                         
                         // check for permission
-                        if (!player.hasPermission("finddeathlocation.item")) {
+                        if (!player.hasPermission("deathfeathers.item")) {
                             player.sendMessage(convertedLang("notPermitted"));
                             return;
                         }
@@ -263,7 +263,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                         }
                         
                         // check for permission
-                        if (!player.hasPermission("finddeathlocation.item")) {
+                        if (!player.hasPermission("deathfeathers.item")) {
                             player.sendMessage(convertedLang("notPermitted"));
                             return;
                         }
@@ -294,7 +294,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                         }
                         
                         // check for permission
-                        if (!player.hasPermission("finddeathlocation.item")) {
+                        if (!player.hasPermission("deathfeathers.item")) {
                             player.sendMessage(convertedLang("notPermitted"));
                             return;
                         }
@@ -318,7 +318,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                         }
                         
                         // check for permission
-                        if (!player.hasPermission("finddeathlocation.item")) {
+                        if (!player.hasPermission("deathfeathers.item")) {
                             player.sendMessage(convertedLang("notPermitted"));
                             return;
                         }
@@ -446,7 +446,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
         if(cmd.getName().equalsIgnoreCase("finddeath")) {
             
             // check for permission
-            if (!player.hasPermission("finddeathlocation.command")) {
+            if (!player.hasPermission("deathfeathers.command")) {
                 player.sendMessage(convertedLang("notPermitted"));
                 return true;
             
@@ -486,7 +486,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
             if(args.length == 0) {
                 
                 // check for permission
-                if (!player.hasPermission("finddeathlocation.tp")) {
+                if (!player.hasPermission("deathfeathers.tp")) {
                     player.sendMessage(convertedLang("notPermitted"));
                     return true;
                 
@@ -503,7 +503,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                         // teleport the player to their own death location
                         teleportPlayer(player, player.getName());
                         
-                        if (!player.hasPermission("finddeathlocation.tp.bypass")) {
+                        if (!player.hasPermission("deathfeathers.tp.bypass")) {
                             // if cooldown in config, set the players cooldown
                             if (getConfig().getInt("cooldownSeconds") > 0) {
                                 cooldown(player); 
@@ -519,7 +519,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
             String target = args[0];
             
             // check for permission to tp to others
-            if (!player.hasPermission("finddeathlocation.tp.others")) {
+            if (!player.hasPermission("deathfeathers.tp.others")) {
                 player.sendMessage(convertedLang("notPermitted"));
                 return true;
             } else {
@@ -535,7 +535,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                     // teleport player to targets death location
                     teleportPlayer(player, target);
                     
-                    if (!player.hasPermission("finddeathlocation.tp.bypass")) {
+                    if (!player.hasPermission("deathfeathers.tp.bypass")) {
                         // if cooldown in config, set the players cooldown
                         if (getConfig().getInt("cooldownSeconds") > 0) {
                             cooldown(player); 
@@ -563,7 +563,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
         
         // delay teleportation if configured so
         if (getConfig().getInt("delaySeconds") > 0) {
-            if (!player.hasPermission("finddeathlocation.tp.bypass")) {
+            if (!player.hasPermission("deathfeathers.tp.bypass")) {
                 int delaySeconds = getConfig().getInt("delaySeconds");
                 player.sendMessage(convertedLang("teleporting").replace("{DELAY}", Integer.toString(delaySeconds)));
                 getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
