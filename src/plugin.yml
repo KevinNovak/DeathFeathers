@@ -15,7 +15,7 @@ commands:
 permissions:
     deathfeathers.item:
         description: Use the find death item.
-        default: op
+        default: true
     deathfeathers.command:
         description: Use the find death command.
         default: op
