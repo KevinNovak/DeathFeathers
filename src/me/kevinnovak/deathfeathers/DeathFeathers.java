@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -415,7 +416,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                     }
                     double z = (m*(x - pxPos)) + pzPos;
                     Location test = new Location(world, x,player.getLocation().getY() + 1,z);
-                    ParticleEffect.REDSTONE.display(0, 0, 0, 10, 1, test, player);
+                    world.playEffect(test, Effect.COLOURED_DUST, 0);
                 }
             }
         } else {
