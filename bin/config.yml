@@ -45,9 +45,9 @@ rightClick: false
 # Which mouse button should the above item use for showing particles paths?
 # it is possible to use both or neither here, if desired
 # default: leftClickParticles: false
-# default: rightClickParticles: true
+# default: rightClickParticles: false
 leftClickParticles: false
-rightClickParticles: true
+rightClickParticles: false
 
 # The distance away from the player to start and stop showing particles
 # Distance is in number of blocks
