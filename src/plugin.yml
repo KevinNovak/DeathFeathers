@@ -8,12 +8,15 @@ commands:
     df:
         usage: /<df>
         description: List all DeathFeathers commands.
+        aliases: [deathfeather, deathfeathers, dfs]
     finddeath:
         usage: /<command>
         description: Finds distance to players death location.
+        aliases: [fd, fdeath, findd]
     tpdeath:
         usage: /<command>
         description: Teleports to a players death location.
+        aliases: [tpd]
         
 permissions:
     deathfeathers.item:

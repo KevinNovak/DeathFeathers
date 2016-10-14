@@ -150,35 +150,39 @@ public class DeathFeathers extends JavaPlugin implements Listener{
     @EventHandler
     // when a player respawns...
     public void onRespawn(PlayerRespawnEvent e) {
-        // give player the respawn item
-        if (getConfig().getBoolean("itemOnRespawn")) {
-            e.getPlayer().getInventory().addItem(deathItem);
-        }
-        
-        // set the players compass
-        if (getConfig().getBoolean("compassDirection")) {
-            setCompass(e.getPlayer());
-        }
+    	if (e.getPlayer().hasPermission("deathfeathers.item")) {
+            // give player the respawn item
+            if (getConfig().getBoolean("itemOnRespawn")) {
+                e.getPlayer().getInventory().addItem(deathItem);
+            }
+            
+            // set the players compass
+            if (getConfig().getBoolean("compassDirection")) {
+                setCompass(e.getPlayer());
+            }
+    	}
     }
     
     @EventHandler
     // when a player joins...
     public void onPlayerJoin(PlayerJoinEvent e) {
-        
-        // set the players compass
-        if (getConfig().getBoolean("compassDirection")) {
-            setCompass(e.getPlayer());
-        }
+    	if (e.getPlayer().hasPermission("deathfeathers.item")) {
+	        // set the players compass
+	        if (getConfig().getBoolean("compassDirection")) {
+	            setCompass(e.getPlayer());
+	        }
+    	}
     }
     
     @EventHandler
     // when a player changes worlds...
     public void onChangeWorld(PlayerChangedWorldEvent e) {
-        
-        // set the players compass
-        if (getConfig().getBoolean("compassDirection")) {
-            setCompass(e.getPlayer());
-        }
+    	if (e.getPlayer().hasPermission("deathfeathers.item")) {        
+	        // set the players compass
+	        if (getConfig().getBoolean("compassDirection")) {
+	            setCompass(e.getPlayer());
+	        }
+    	}
     }
     
     // ======================
