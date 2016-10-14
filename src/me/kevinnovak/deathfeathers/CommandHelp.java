@@ -14,7 +14,7 @@ public class CommandHelp {
 		this.colorConv = colorConv;
 	}
 	
-	public void evaluate() {
+	private void evaluate() {
 		if (player.hasPermission("deathfeathers.command")) {
 			lines.add(colorConv.convertConfig("helpFindDeath"));
 		}
@@ -26,6 +26,7 @@ public class CommandHelp {
 		}
 	}
 	public void print(int pageNum) {
+		this.evaluate();
 		if (pageNum > Math.ceil((double)lines.size()/7)) {
 			pageNum = 1;
 		}

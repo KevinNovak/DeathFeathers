@@ -451,7 +451,6 @@ public class DeathFeathers extends JavaPlugin implements Listener{
         		}
         	}
             CommandHelp commandHelp = new CommandHelp(player, colorConv);
-            commandHelp.evaluate();
             commandHelp.print(pageNum);
             return true;
         }
