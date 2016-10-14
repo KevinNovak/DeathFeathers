@@ -5,6 +5,9 @@ author: KevinNovak
 description: Finds players death location!
 
 commands:
+    df:
+        usage: /<df>
+        description: List all DeathFeathers commands.
     finddeath:
         usage: /<command>
         description: Finds distance to players death location.

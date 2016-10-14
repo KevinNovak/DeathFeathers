@@ -2,12 +2,10 @@ package me.kevinnovak.deathfeathers;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -38,13 +36,14 @@ public class DeathFeathers extends JavaPlugin implements Listener{
     // create deaths.yml file
     public File deathsFile = new File(getDataFolder()+"/deaths.yml");
     public FileConfiguration deathData = YamlConfiguration.loadConfiguration(deathsFile);
-    
     // load the item to listen for
     ItemStack deathItem = new ItemStack(getConfig().getInt("item"));
     
     // cooldown hashmaps
     private HashMap<String, Integer> cooldownTime;
     private HashMap<String, BukkitRunnable> cooldownTask;
+    
+    private ColorConverter colorConv = new ColorConverter(getConfig());
     
     // ======================
     // Enable
@@ -56,7 +55,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
         // name the death item if it is enabled in the config
         if (getConfig().getBoolean("itemNameEnabled") || getConfig().getBoolean("itemNameRequired")) {
             ItemMeta deathItemMeta = deathItem.getItemMeta();
-            deathItemMeta.setDisplayName(convertedLang("itemName"));
+            deathItemMeta.setDisplayName(colorConv.convertConfig("itemName"));
             deathItem.setItemMeta(deathItemMeta);
         }
         
@@ -65,7 +64,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
             ItemMeta deathItemMeta = deathItem.getItemMeta();
             
             List<String> list = getConfig().getStringList("itemLore");
-            List<String> convertedList = convertedLang(list);
+            List<String> convertedList = colorConv.convert(list);
             deathItemMeta.setLore(convertedList);
 
             deathItem.setItemMeta(deathItemMeta);
@@ -129,7 +128,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
             
             // creating the string to log
             String location = player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ();
-            String deathLog = convertedLang("deathLog").replace("{PLAYER}", player.getName()).replace("{LOCATION}", location).replace("{WORLD}", player.getLocation().getWorld().getName());
+            String deathLog = colorConv.convertConfig("deathLog").replace("{PLAYER}", player.getName()).replace("{LOCATION}", location).replace("{WORLD}", player.getLocation().getWorld().getName());
             
             // sending log to console
             if (getConfig().getBoolean("consoleLog")) {
@@ -234,14 +233,14 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                             }
                             
                             // if items display name is not the required one
-                            if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(convertedLang("itemName")))) {
+                            if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(colorConv.convertConfig("itemName")))) {
                                 return;
                             }   
                         }
                         
                         // check for permission
                         if (!player.hasPermission("deathfeathers.item")) {
-                            player.sendMessage(convertedLang("notPermitted"));
+                            player.sendMessage(colorConv.convertConfig("notPermitted"));
                             return;
                         }
                     
@@ -258,14 +257,14 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                             }
                             
                             // if items display name is not the required one
-                            if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(convertedLang("itemName")))) {
+                            if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(colorConv.convertConfig("itemName")))) {
                                 return;
                             }   
                         }
                         
                         // check for permission
                         if (!player.hasPermission("deathfeathers.item")) {
-                            player.sendMessage(convertedLang("notPermitted"));
+                            player.sendMessage(colorConv.convertConfig("notPermitted"));
                             return;
                         }
                         
@@ -289,14 +288,14 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                             }
                             
                             // if items display name is not the required one
-                            if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(convertedLang("itemName")))) {
+                            if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(colorConv.convertConfig("itemName")))) {
                                 return;
                             }   
                         }
                         
                         // check for permission
                         if (!player.hasPermission("deathfeathers.item")) {
-                            player.sendMessage(convertedLang("notPermitted"));
+                            player.sendMessage(colorConv.convertConfig("notPermitted"));
                             return;
                         }
                     
@@ -313,14 +312,14 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                             }
                             
                             // if items display name is not the required one
-                            if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(convertedLang("itemName")))) {
+                            if(!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(colorConv.convertConfig("itemName")))) {
                                 return;
                             }   
                         }
                         
                         // check for permission
                         if (!player.hasPermission("deathfeathers.item")) {
-                            player.sendMessage(convertedLang("notPermitted"));
+                            player.sendMessage(colorConv.convertConfig("notPermitted"));
                             return;
                         }
                         
@@ -339,7 +338,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
         
         // if the player has not died, let them know
         if (deathData.getString(playername) == null) {
-            player.sendMessage(convertedLang("notDied"));
+            player.sendMessage(colorConv.convertConfig("notDied"));
             return;
         }
         
@@ -368,11 +367,11 @@ public class DeathFeathers extends JavaPlugin implements Listener{
             }
             
             // send that distance to the player
-            player.sendMessage(convertedLang("sendDistance").replace("{DISTANCE}", Integer.toString(distanceToDeath)));
+            player.sendMessage(colorConv.convertConfig("sendDistance").replace("{DISTANCE}", Integer.toString(distanceToDeath)));
             
         // otherwise tell the player their death is in another world
         } else {
-            player.sendMessage(convertedLang("anotherWorld"));
+            player.sendMessage(colorConv.convertConfig("anotherWorld"));
         }
     }
     
@@ -384,7 +383,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
         
         // if the player has not died, let them know
         if (deathData.getString(playername) == null) {
-            player.sendMessage(convertedLang("notDied"));
+            player.sendMessage(colorConv.convertConfig("notDied"));
             return;
         }
         
@@ -420,7 +419,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                 }
             }
         } else {
-            player.sendMessage(convertedLang("anotherWorld"));
+            player.sendMessage(colorConv.convertConfig("anotherWorld"));
         }
     }
 
@@ -433,7 +432,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
         // ======================
         // if command sender is the console, let them know, cancel command
         if (!(sender instanceof Player)) {
-            sender.sendMessage(convertedLang("noConsole"));
+            sender.sendMessage(colorConv.convertConfig("noConsole"));
             return true;
         }
         
@@ -442,13 +441,29 @@ public class DeathFeathers extends JavaPlugin implements Listener{
         final String playername = player.getName();
         
         // ======================
+        // /mt
+        // ======================
+        if(cmd.getName().equalsIgnoreCase("df")) {
+        	int pageNum = 1;
+        	if (args.length > 0) {
+        		if (tryParse(args[0]) != null) {
+        			pageNum = tryParse(args[0]);
+        		}
+        	}
+            CommandHelp commandHelp = new CommandHelp(player, colorConv);
+            commandHelp.evaluate();
+            commandHelp.print(pageNum);
+            return true;
+        }
+        
+        // ======================
         // /finddeath
         // ======================
         if(cmd.getName().equalsIgnoreCase("finddeath")) {
             
             // check for permission
             if (!player.hasPermission("deathfeathers.command")) {
-                player.sendMessage(convertedLang("notPermitted"));
+                player.sendMessage(colorConv.convertConfig("notPermitted"));
                 return true;
             
             // send the distance to the player
@@ -471,13 +486,13 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                 if(getConfig().getInt("cooldownSeconds") - cooldownTime.get(playername) < 0) {
                     
                     // send a message telling them theyre already teleporting
-                    player.sendMessage(convertedLang("tpWait"));
+                    player.sendMessage(colorConv.convertConfig("tpWait"));
                
                 // the player is not waiting to teleport
                 } else {
                     
                     // send a message telling them the time to wait
-                    player.sendMessage(convertedLang("cooldown").replace("{COOLDOWN}", convertTime(cooldownTime.get(playername))));
+                    player.sendMessage(colorConv.convertConfig("cooldown").replace("{COOLDOWN}", convertTime(cooldownTime.get(playername))));
                 }
                 return true;
             }
@@ -488,14 +503,14 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                 
                 // check for permission
                 if (!player.hasPermission("deathfeathers.tp")) {
-                    player.sendMessage(convertedLang("notPermitted"));
+                    player.sendMessage(colorConv.convertConfig("notPermitted"));
                     return true;
                 
                 } else {
                     
                     // if the command sender does not have death data
                     if (deathData.getString(player.getName()) == null) {
-                        player.sendMessage(convertedLang("notDied"));
+                        player.sendMessage(colorConv.convertConfig("notDied"));
                         return true;
                     
                     // command sender has death data
@@ -521,13 +536,13 @@ public class DeathFeathers extends JavaPlugin implements Listener{
             
             // check for permission to tp to others
             if (!player.hasPermission("deathfeathers.tp.others")) {
-                player.sendMessage(convertedLang("notPermitted"));
+                player.sendMessage(colorConv.convertConfig("notPermitted"));
                 return true;
             } else {
                 
                 // if the target does not have death data
                 if (deathData.getString(target) == null) {
-                    player.sendMessage(convertedLang("noLocation"));
+                    player.sendMessage(colorConv.convertConfig("noLocation"));
                     return true;
                 
                 // target has death data
@@ -566,7 +581,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
         if (getConfig().getInt("delaySeconds") > 0) {
             if (!player.hasPermission("deathfeathers.tp.bypass")) {
                 int delaySeconds = getConfig().getInt("delaySeconds");
-                player.sendMessage(convertedLang("teleporting").replace("{DELAY}", Integer.toString(delaySeconds)));
+                player.sendMessage(colorConv.convertConfig("teleporting").replace("{DELAY}", Integer.toString(delaySeconds)));
                 getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
                     public void run() {
                         player.teleport(targetLocation);
@@ -665,22 +680,6 @@ public class DeathFeathers extends JavaPlugin implements Listener{
     }
     
     // =========================
-    // Convert String in Config
-    // =========================
-    // converts string in config, to a string with colors
-    String convertedLang(String toConvert) {
-        return ChatColor.translateAlternateColorCodes('&', getConfig().getString(toConvert));
-    }
-    List<String> convertedLang(List<String> toConvert) {
-        List<String> translatedColors = new ArrayList<String>();
-        for (String stringToTranslate: toConvert){
-            translatedColors.add(ChatColor.translateAlternateColorCodes('&',stringToTranslate));
-             
-        }
-        return translatedColors;
-    }
-    
-    // =========================
     // Info
     // =========================
     // sends an info string to the console
@@ -693,5 +692,13 @@ public class DeathFeathers extends JavaPlugin implements Listener{
     // =========================
     int getCoodinate(String player, char coodinate) {
         return Integer.parseInt(deathData.getString(player + "." + coodinate));
+    }
+    
+    public static Integer tryParse(String text) {
+    	try {
+    		return Integer.parseInt(text);
+    	} catch (NumberFormatException e) {
+    		return null;
+    	}
     }
 }

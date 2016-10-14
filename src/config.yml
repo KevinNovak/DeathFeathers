@@ -103,7 +103,7 @@ numBlocksAbove: 0
 # default: consoleLog: true
 consoleLog: true
 
-# Language
+# General Language
 # for senddistance, place the variable "{DISTANCE}" where you would like the distance
 # default: senddistance: '&7Your last death is &6{DISTANCE} &7blocks away.'
 sendDistance: '&7Your last death is &6{DISTANCE} &7blocks away.'
@@ -122,6 +122,17 @@ anotherWorld: '&cYour death location is in another world!'
 tpWait: '&cYou are already teleporting!'
 noConsole: '&cConsole cannot run DeathFeathers commands!'
 noLocation: '&cPlayer death location not found!'
+
+# Help Menu Language
+helpHeader: ' &e------------- &6Death Feathers &e-------------'
+helpFooter: ' &e----------------------------------------'
+helpNoCommands: '&7 You are not allowed to use commands.'
+# for helpPage, place the variable "{PAGE}" where you would like the next page number
+# default: helpPage: '&7 Type &6/df {PAGE} &7for more info.'
+helpPage: '&7 Type &6/df {PAGE} &7for more info.'
+helpFindDeath: '&b/finddeath &7- Show distance to your death.'
+helpTpDeath: '&b/tpdeath &7- Teleport to your death.'
+helpTpDeathOther: '&b/tpdeath <player> &7- Teleport to a players death.'
 
 # Variable Language
 day: 'day'
