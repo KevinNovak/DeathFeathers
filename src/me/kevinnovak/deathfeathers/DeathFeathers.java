@@ -3,6 +3,7 @@ package me.kevinnovak.deathfeathers;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -28,7 +29,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-// suppress the item id warnings
+// Suppress deprecation warnings
 @SuppressWarnings("deprecation")
 
 public class DeathFeathers extends JavaPlugin implements Listener{
@@ -44,6 +45,8 @@ public class DeathFeathers extends JavaPlugin implements Listener{
     private HashMap<String, BukkitRunnable> cooldownTask;
     
     private ColorConverter colorConv = new ColorConverter(getConfig());
+    
+	LinkedHashMap<String, String> permissionDesc = new LinkedHashMap<String, String>();
     
     // ======================
     // Enable
@@ -73,9 +76,14 @@ public class DeathFeathers extends JavaPlugin implements Listener{
         // register the listeners
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
         
-        // prepare the cooldown hasmaps
+        // prepare the cooldown hashmaps
         cooldownTime = new HashMap<String, Integer>();
         cooldownTask = new HashMap<String, BukkitRunnable>();
+        
+    	permissionDesc.put("deathfeathers.command", "helpFindDeath");
+    	permissionDesc.put("deathfeathers.tp", "helpTpDeath");
+    	permissionDesc.put("deathfeathers.command", "helpFindDeath");
+    	permissionDesc.put("deathfeathers.tp.others", "helpTpDeathOther");
         
         // start metrics
         if (getConfig().getBoolean("metrics")) {
@@ -454,7 +462,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
         			pageNum = tryParse(args[0]);
         		}
         	}
-            CommandHelp commandHelp = new CommandHelp(player, colorConv);
+            CommandHelp commandHelp = new CommandHelp(player, colorConv, permissionDesc);
             commandHelp.print(pageNum);
             return true;
         }

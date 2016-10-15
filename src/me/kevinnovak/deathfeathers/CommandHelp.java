@@ -9,20 +9,11 @@ public class CommandHelp {
 	private Player player = null;
 	private ColorConverter colorConv = null;
 	
-	public CommandHelp(Player player, ColorConverter colorConv) {
 		this.player = player;
 		this.colorConv = colorConv;
 	}
 	
 	private void evaluate() {
-		if (player.hasPermission("deathfeathers.command")) {
-			lines.add(colorConv.convertConfig("helpFindDeath"));
-		}
-		if (player.hasPermission("deathfeathers.tp")) {
-			lines.add(colorConv.convertConfig("helpTpDeath"));
-		}
-		if (player.hasPermission("deathfeathers.tp.others")) {
-			lines.add(colorConv.convertConfig("helpTpDeathOther"));
 		}
 	}
 	public void print(int pageNum) {
