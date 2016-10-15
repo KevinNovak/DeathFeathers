@@ -34,19 +34,22 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class DeathFeathers extends JavaPlugin implements Listener{
     
-    // create deaths.yml file
+    // Create the deaths.yml to hold user deaths
     public File deathsFile = new File(getDataFolder()+"/deaths.yml");
     public FileConfiguration deathData = YamlConfiguration.loadConfiguration(deathsFile);
-    // load the item to listen for
-    ItemStack deathItem = new ItemStack(getConfig().getInt("item"));
     
-    // cooldown hashmaps
-    private HashMap<String, Integer> cooldownTime;
-    private HashMap<String, BukkitRunnable> cooldownTask;
-    
+    // Create hashmap for command permissions and their descriptions
+	LinkedHashMap<String, String> permissionDesc = new LinkedHashMap<String, String>();
+	
+    // Create the color converter to add color to chat
     private ColorConverter colorConv = new ColorConverter(getConfig());
     
-	LinkedHashMap<String, String> permissionDesc = new LinkedHashMap<String, String>();
+    // Load in the death item from config.yml
+    ItemStack deathItem = new ItemStack(getConfig().getInt("item"));
+	
+    // Create hashmaps for cooldowns
+    private HashMap<String, Integer> cooldownTime;
+    private HashMap<String, BukkitRunnable> cooldownTask;
     
     // ======================
     // Enable
