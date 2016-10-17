@@ -2,11 +2,17 @@
 # https://www.spigotmc.org/resources/deathfeathers.30530/
 # Created by KevinNovak
 
+# ============================================
+# Metrics
+# ============================================
 # Whether or not to collect data on plugin usage
 # Viewable at http://mcstats.org/plugin/DeathFeathers/
 # default: metrics: true
 metrics: true
 
+# ============================================
+# Item
+# ============================================
 # The item which can be used to find your last death location
 # must be an item ID, by default 288, a feather
 # A list of item IDs can be found here:
@@ -41,6 +47,24 @@ itemLore:
 - '&3Left click to show distance'
 - '&3Right click to show path'
 
+# Should players be given the item when they respawn?
+# default: itemOnRespawn: true
+itemOnRespawn: true
+
+# Should compasses point to players last death locations?
+# If you would also like players to click with a compass for distance,
+# then change the "item" above to be a compass, item ID 345 
+# default: compassDirection: false
+compassDirection: false
+
+# Should distances be calculated in 3 dimensions instead of 2?
+# in other words, should height count towards distance?
+# default: distance3D: false
+distance3D: false
+
+# ============================================
+# Controls
+# ============================================
 # Which mouse button should the above item use for finding distance?
 # it is possible to use both or neither here, if desired
 # default: leftClick: true
@@ -63,21 +87,9 @@ rightClickParticles: true
 particleStartDistance: 0
 particleStopDistance: 12
 
-# Should players be given the item when they respawn?
-# default: itemOnRespawn: true
-itemOnRespawn: true
-
-# Should compasses point to players last death locations?
-# If you would also like players to click with a compass for distance,
-# then change the "item" above to be a compass, item ID 345 
-# default: compassDirection: false
-compassDirection: false
-
-# Should distances be calculated in 3 dimensions instead of 2?
-# in other words, should height count towards distance?
-# default: distance3D: false
-distance3D: false
-
+# ============================================
+# Teleportation
+# ============================================
 # The time, in seconds, to wait before teleporting to a players death location
 # can be bypassed with the permission deathfeathers.tp.bypass
 # or set to 0 to disable completely
@@ -98,11 +110,16 @@ cooldownSeconds: 3600
 # default: numBlocksAbove: 0
 numBlocksAbove: 0
 
+# ============================================
+# Logging
+# ============================================
 # Whether the console should log players death locations.
 # default: consoleLog: true
 consoleLog: true
 
+# ============================================
 # General Language
+# ============================================
 # for senddistance, place the variable "{DISTANCE}" where you would like the distance
 # default: senddistance: '&7Your last death is &6{DISTANCE} &7blocks away.'
 sendDistance: '&7Your last death is &6{DISTANCE} &7blocks away.'
@@ -122,7 +139,9 @@ tpWait: '&cYou are already teleporting!'
 noConsole: '&cConsole cannot run DeathFeathers commands!'
 noLocation: '&cPlayer death location not found!'
 
+# ============================================
 # Help Menu Language
+# ============================================
 helpHeader: ' &e------------- &6Death Feathers &e-------------'
 helpFooter: ' &e----------------------------------------'
 helpNoCommands: '&7 You are not allowed to use commands.'
@@ -133,7 +152,9 @@ helpFindDeath: '&b/finddeath &7- Show distance to your death.'
 helpTpDeath: '&b/tpdeath &7- Teleport to your death.'
 helpTpDeathOther: '&b/tpdeath <player> &7- Teleport to a players death.'
 
-# Variable Language
+# ============================================
+# Variable Langauge
+# ============================================
 day: 'day'
 days: 'days'
 hour: 'hour'
