@@ -200,7 +200,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
     // Setting Compass
     // ======================
     // sets the players compass to point to their death location
-    void setCompass(Player player) {
+    void setCompass(final Player player) {
         // delay setting the compass until the player has had time to properly respawn
         getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
             public void run() {
@@ -582,14 +582,14 @@ public class DeathFeathers extends JavaPlugin implements Listener{
     // Teleport Player
     // ======================
     // teleports player to their death location, or another players death location
-    void teleportPlayer(Player player, String target) {
+    void teleportPlayer(final Player player, String target) {
         
         // grabs the provide targets death location
         World world = getServer().getWorld(deathData.getString(target + ".World"));
         int xPos = getCoodinate(target, 'X');
         int yPos = getCoodinate(target, 'Y') + getConfig().getInt("numBlocksAbove");
         int zPos = getCoodinate(target, 'Z');
-        Location targetLocation = new Location(world, xPos, yPos, zPos);
+        final Location targetLocation = new Location(world, xPos, yPos, zPos);
         
         // delay teleportation if configured so
         if (getConfig().getInt("delaySeconds") > 0) {
@@ -617,7 +617,7 @@ public class DeathFeathers extends JavaPlugin implements Listener{
     // =========================
     void cooldown(Player player) {
         // get player name
-        String playername = player.getName();
+        final String playername = player.getName();
         
         // put the player in the hash table with delay time
         cooldownTime.put(playername, getConfig().getInt("cooldownSeconds") + getConfig().getInt("delaySeconds"));
