@@ -14,11 +14,11 @@ metrics: true
 # Item
 # ============================================
 # The item which can be used to find your last death location
-# must be an item ID, by default 288, a feather
-# A list of item IDs can be found here:
-# http://minecraft-ids.grahamedgecombe.com/
-# default: item: 288
-item: 288
+# must be an item name, by default a feather
+# A list of item names can be found here:
+# https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+# default: item: FEATHER
+item: FEATHER
 
 # Should the item that is given upon death be named?
 # default: itemNameEnabled: true

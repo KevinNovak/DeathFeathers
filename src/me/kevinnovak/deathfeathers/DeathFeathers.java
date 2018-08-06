@@ -5,10 +5,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -45,7 +49,8 @@ public class DeathFeathers extends JavaPlugin implements Listener{
     private ColorConverter colorConv = new ColorConverter(getConfig());
     
     // Load in the death item from config.yml
-    ItemStack deathItem = new ItemStack(getConfig().getInt("item"));
+    Material deathMaterial = Material.getMaterial(getConfig().getString("item"));
+    ItemStack deathItem = new ItemStack(deathMaterial);
 	
     // Create hashmaps for cooldowns
     private HashMap<String, Integer> cooldownTime;
@@ -430,12 +435,21 @@ public class DeathFeathers extends JavaPlugin implements Listener{
                     }
                     double z = (m*(x - pxPos)) + pzPos;
                     Location test = new Location(world, x,player.getLocation().getY() + 1,z);
-                    world.playEffect(test, Effect.COLOURED_DUST, 0);
+					//world.playEffect(test, Effect.CHORUS_FLOWER_GROW, 0);
+                    world.spawnParticle(Particle.REDSTONE, test, 1, new Particle.DustOptions(getRandomColor(), 1));
                 }
             }
         } else {
             player.sendMessage(colorConv.convertConfig("anotherWorld"));
         }
+    }
+    
+    public Color getRandomColor() {
+    	Random r = new Random();
+    	int randR = r.nextInt(255);
+    	int randG = r.nextInt(255);
+    	int randB = r.nextInt(255);
+		return Color.fromRGB(randR, randG, randB);
     }
 
     // ======================
