@@ -1,0 +1,40 @@
+name: DeathFeathers
+version: 1.1.0
+main: me.kevinnovak.deathfeathers.DeathFeathers
+author: KevinNovak
+description: Allow players to find their death locations with feathers!
+api-version: 1.14
+
+commands:
+  df:
+    usage: /<df>
+    description: List all DeathFeathers commands.
+    aliases: [deathfeather, deathfeathers, dfs]
+  finddeath:
+    usage: /<command>
+    description: Finds distance to players death location.
+    aliases: [fd, fdeath, findd]
+  tpdeath:
+    usage: /<command>
+    description: Teleports to a players death location.
+    aliases: [tpd]
+
+permissions:
+  deathfeathers.item:
+    description: Use the find death item.
+    default: true
+  deathfeathers.command:
+    description: Use the find death command.
+    default: op
+  deathfeathers.tp:
+    description: Teleport to your death location.
+    default: op
+  deathfeathers.tp.others:
+    description: Teleport to a players death location.
+    default: op
+  deathfeathers.tp.bypass:
+    description: Bypass the teleportation delay.
+    default: op
+  deathfeathers.log:
+    description: See death locations when players die.
+    default: false
