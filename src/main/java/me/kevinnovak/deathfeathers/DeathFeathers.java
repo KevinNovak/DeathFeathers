@@ -160,9 +160,9 @@ public class DeathFeathers extends JavaPlugin implements Listener {
     @EventHandler
     // when a player joins...
     public void onPlayerJoin(PlayerJoinEvent e) {
-        if (e.getPlayer().hasPermission("deathfeathers.item")) {
-            // set the players compass
-            if (getConfig().getBoolean("compassDirection")) {
+    	if (getConfig().getBoolean("compassDirection")) {
+            // set the players compass            
+            if (e.getPlayer().hasPermission("deathfeathers.item")) {
                 setCompass(e.getPlayer());
             }
         }
@@ -171,9 +171,9 @@ public class DeathFeathers extends JavaPlugin implements Listener {
     @EventHandler
     // when a player changes worlds...
     public void onChangeWorld(PlayerChangedWorldEvent e) {
-        if (e.getPlayer().hasPermission("deathfeathers.item")) {
-            // set the players compass
-            if (getConfig().getBoolean("compassDirection")) {
+    	if (getConfig().getBoolean("compassDirection")) {
+            // set the players compass            
+            if (e.getPlayer().hasPermission("deathfeathers.item")) {
                 setCompass(e.getPlayer());
             }
         }
