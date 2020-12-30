@@ -105,10 +105,11 @@ public class DeathFeathers extends JavaPlugin implements Listener {
         if (e.getEntityType() == EntityType.PLAYER) {
             // saving the players death location
             Player player = e.getEntity();
-            deathData.set(player.getName() + ".World", player.getLocation().getWorld().getName());
-            deathData.set(player.getName() + ".X", player.getLocation().getBlockX());
-            deathData.set(player.getName() + ".Y", player.getLocation().getBlockY());
-            deathData.set(player.getName() + ".Z", player.getLocation().getBlockZ());
+            String loc = player.getLocation().getWorld().getName() + "," + 
+            			 player.getLocation().getBlockX() + "," + 
+            		     player.getLocation().getBlockY() + "," + 
+            			 player.getLocation().getBlockZ();
+            deathData.set(player.getUniqueId().toString(), loc);
             try {
                 deathData.save(deathsFile);
             } catch (IOException e1) {
@@ -160,9 +161,9 @@ public class DeathFeathers extends JavaPlugin implements Listener {
     @EventHandler
     // when a player joins...
     public void onPlayerJoin(PlayerJoinEvent e) {
-        if (e.getPlayer().hasPermission("deathfeathers.item")) {
-            // set the players compass
-            if (getConfig().getBoolean("compassDirection")) {
+    	if (getConfig().getBoolean("compassDirection")) {
+            // set the players compass            
+            if (e.getPlayer().hasPermission("deathfeathers.item")) {
                 setCompass(e.getPlayer());
             }
         }
@@ -171,9 +172,9 @@ public class DeathFeathers extends JavaPlugin implements Listener {
     @EventHandler
     // when a player changes worlds...
     public void onChangeWorld(PlayerChangedWorldEvent e) {
-        if (e.getPlayer().hasPermission("deathfeathers.item")) {
-            // set the players compass
-            if (getConfig().getBoolean("compassDirection")) {
+    	if (getConfig().getBoolean("compassDirection")) {
+            // set the players compass            
+            if (e.getPlayer().hasPermission("deathfeathers.item")) {
                 setCompass(e.getPlayer());
             }
         }
@@ -185,29 +186,22 @@ public class DeathFeathers extends JavaPlugin implements Listener {
     // sets the players compass to point to their death location
     private void setCompass(final Player player) {
         // delay setting the compass until the player has had time to properly respawn
-        getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
+        getServer().getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
             public void run() {
-                String playername = player.getName();
-
                 // if player has no death data, dont set the compass
-                if (deathData.getString(playername) == null) {
-                    return;
+                if (deathData.getString(player.getUniqueId().toString()) == null) {
+                	return;
                 }
-
-                // otherwise grab the players death location
-                World world = getServer().getWorld(deathData.getString(playername + ".World"));
-                int xPos = getCoodinate(playername, 'X');
-                int yPos = getCoodinate(playername, 'Y') + getConfig().getInt("numBlocksAbove");
-                int zPos = getCoodinate(playername, 'Z');
-                Location targetLocation = new Location(world, xPos, yPos, zPos);
-
+                
+                Location targetLocation = getDeathLocation(player);
                 // set the players compass to death location
-                player.setCompassTarget(targetLocation);
+                if (targetLocation != null)
+                	player.setCompassTarget(targetLocation);
             }
         }, 20L); // delayed to allow player time to respawn
     }
 
-    // ======================
+	// ======================
     // Clicking with Item
     // ======================
     @EventHandler
@@ -220,18 +214,18 @@ public class DeathFeathers extends JavaPlugin implements Listener {
         // if player is left clicking with the death item
         if (getConfig().getBoolean("leftClick") || getConfig().getBoolean("leftClickParticles")) {
             if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
-                if (player.getItemInHand().getType() == deathItem.getType()) {
+                if (player.getInventory().getItemInMainHand().getType() == deathItem.getType()) {
                     if (getConfig().getBoolean("leftClick")) {
                         // if item name is required
                         if (getConfig().getBoolean("itemNameRequired")) {
 
                             // if item does not have a display name
-                            if (player.getItemInHand().getItemMeta().getDisplayName() == null) {
+                            if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null) {
                                 return;
                             }
 
                             // if items display name is not the required one
-                            if (!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(colorConv.convertConfig("itemName")))) {
+                            if (!(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(colorConv.convertConfig("itemName")))) {
                                 return;
                             }
                         }
@@ -250,12 +244,12 @@ public class DeathFeathers extends JavaPlugin implements Listener {
                         if (getConfig().getBoolean("itemNameRequired")) {
 
                             // if item does not have a display name
-                            if (player.getItemInHand().getItemMeta().getDisplayName() == null) {
+                            if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null) {
                                 return;
                             }
 
                             // if items display name is not the required one
-                            if (!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(colorConv.convertConfig("itemName")))) {
+                            if (!(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(colorConv.convertConfig("itemName")))) {
                                 return;
                             }
                         }
@@ -275,18 +269,18 @@ public class DeathFeathers extends JavaPlugin implements Listener {
         // if player is right clicking with the death item
         if (getConfig().getBoolean("rightClick") || getConfig().getBoolean("rightClickParticles")) {
             if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
-                if (player.getItemInHand().getType() == deathItem.getType()) {
+                if (player.getInventory().getItemInMainHand().getType() == deathItem.getType()) {
                     if (getConfig().getBoolean("rightClick")) {
                         // if item name is required
                         if (getConfig().getBoolean("itemNameRequired")) {
 
                             // if item does not have a display name
-                            if (player.getItemInHand().getItemMeta().getDisplayName() == null) {
+                            if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null) {
                                 return;
                             }
 
                             // if items display name is not the required one
-                            if (!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(colorConv.convertConfig("itemName")))) {
+                            if (!(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(colorConv.convertConfig("itemName")))) {
                                 return;
                             }
                         }
@@ -305,12 +299,12 @@ public class DeathFeathers extends JavaPlugin implements Listener {
                         if (getConfig().getBoolean("itemNameRequired")) {
 
                             // if item does not have a display name
-                            if (player.getItemInHand().getItemMeta().getDisplayName() == null) {
+                            if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null) {
                                 return;
                             }
 
                             // if items display name is not the required one
-                            if (!(player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(colorConv.convertConfig("itemName")))) {
+                            if (!(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(colorConv.convertConfig("itemName")))) {
                                 return;
                             }
                         }
@@ -332,24 +326,28 @@ public class DeathFeathers extends JavaPlugin implements Listener {
     // Sending Distance to Player
     // ===========================
     private void sendDistance(Player player) {
-        String playername = player.getName();
-
         // if the player has not died, let them know
-        if (deathData.getString(playername) == null) {
+        if (deathData.getString(player.getUniqueId().toString()) == null) {
             player.sendMessage(colorConv.convertConfig("notDied"));
             return;
         }
 
+        Location deathLoc = getDeathLocation(player);
+        if (deathLoc == null) {
+        	player.sendMessage(colorConv.convertConfig("noLocation"));
+        	return;
+        }
+        
         // otherwise grab the world the player is in
-        World world = getServer().getWorld(deathData.getString(playername + ".World"));
+        World world = deathLoc.getWorld();
 
         // if their death world is the same world they are in
         if (world == player.getWorld()) {
 
             // grab the players death coodinates
-            int xPos = getCoodinate(playername, 'X');
-            int yPos = getCoodinate(playername, 'Y');
-            int zPos = getCoodinate(playername, 'Z');
+            int xPos = deathLoc.getBlockX();
+            int yPos = deathLoc.getBlockY();
+            int zPos = deathLoc.getBlockZ();
 
             // grab the players current coodinates
             double pxPos = player.getLocation().getX();
@@ -377,20 +375,23 @@ public class DeathFeathers extends JavaPlugin implements Listener {
     // Send Particles
     // ======================
     private void sendParticles(Player player) {
-        String playername = player.getName();
-
         // if the player has not died, let them know
-        if (deathData.getString(playername) == null) {
+        if (deathData.getString(player.getUniqueId().toString()) == null) {
             player.sendMessage(colorConv.convertConfig("notDied"));
             return;
         }
 
+        Location loc = getDeathLocation(player);
+        if (loc == null) {
+        	player.sendMessage(colorConv.convertConfig("noLocation"));
+        	return;
+        }
         // otherwise grab the world the player is in
-        World world = getServer().getWorld(deathData.getString(playername + ".World"));
+        World world = loc.getWorld();
         // if their death world is the same world they are in
         if (world == player.getWorld()) {
-            int xPos = getCoodinate(playername, 'X');
-            int zPos = getCoodinate(playername, 'Z');
+            int xPos = loc.getBlockX();
+            int zPos = loc.getBlockZ();
             double pxPos = player.getLocation().getX();
             double pzPos = player.getLocation().getZ();
 
@@ -515,7 +516,7 @@ public class DeathFeathers extends JavaPlugin implements Listener {
                 } else {
 
                     // if the command sender does not have death data
-                    if (deathData.getString(player.getName()) == null) {
+                    if (deathData.getString(player.getUniqueId().toString()) == null) {
                         player.sendMessage(colorConv.convertConfig("notDied"));
                         return true;
 
@@ -547,7 +548,7 @@ public class DeathFeathers extends JavaPlugin implements Listener {
             } else {
 
                 // if the target does not have death data
-                if (deathData.getString(target) == null) {
+                if (deathData.getString(player.getUniqueId().toString()) == null) {
                     player.sendMessage(colorConv.convertConfig("noLocation"));
                     return true;
 
@@ -576,19 +577,19 @@ public class DeathFeathers extends JavaPlugin implements Listener {
     // teleports player to their death location, or another players death location
     private void teleportPlayer(final Player player, String target) {
 
-        // grabs the provide targets death location
-        World world = getServer().getWorld(deathData.getString(target + ".World"));
-        int xPos = getCoodinate(target, 'X');
-        int yPos = getCoodinate(target, 'Y') + getConfig().getInt("numBlocksAbove");
-        int zPos = getCoodinate(target, 'Z');
-        final Location targetLocation = new Location(world, xPos, yPos, zPos);
+        final Location targetLocation = getDeathLocation(player);
+        if (targetLocation == null) {
+        	player.sendMessage(colorConv.convertConfig("noLocation"));
+        	return;
+        }
+        targetLocation.setY(targetLocation.getY() + getConfig().getInt("numBlocksAbove"));
 
         // delay teleportation if configured so
         if (getConfig().getInt("delaySeconds") > 0) {
             if (!player.hasPermission("deathfeathers.tp.bypass")) {
                 int delaySeconds = getConfig().getInt("delaySeconds");
                 player.sendMessage(colorConv.convertConfig("teleporting").replace("{DELAY}", Integer.toString(delaySeconds)));
-                getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
+                getServer().getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
                     public void run() {
                         player.teleport(targetLocation);
                     }
@@ -602,6 +603,8 @@ public class DeathFeathers extends JavaPlugin implements Listener {
         } else {
             player.teleport(targetLocation);
         }
+        
+        deathData.set(player.getUniqueId().toString(), null);
     }
 
     // =========================
@@ -693,13 +696,29 @@ public class DeathFeathers extends JavaPlugin implements Listener {
         Bukkit.getServer().getLogger().info(toConsole);
     }
 
-    // =========================
-    // Get Coodinate
-    // =========================
-    private int getCoodinate(String player, char coodinate) {
-        return Integer.parseInt(deathData.getString(player + "." + coodinate));
-    }
 
+    // =========================
+    // Get Death Location of player from deaths.yml
+    // =========================
+    protected Location getDeathLocation(Player player) {
+        World world;
+		int xPos;
+		int yPos;
+		int zPos;
+		try {
+			String[] loc = deathData.getString(player.getUniqueId().toString()).split(",");
+			world = getServer().getWorld(loc[0]);
+			xPos = Integer.parseInt(loc[1]);
+			yPos = Integer.parseInt(loc[2]);
+			zPos = Integer.parseInt(loc[3]);
+		} catch (Exception e) {
+			if (deathData.contains(player.getUniqueId().toString()))
+				deathData.set(player.getUniqueId().toString(), null);
+			return null;
+		}
+        return new Location(world, xPos, yPos, zPos);
+	}
+    
     private static Integer tryParse(String text) {
         try {
             return Integer.parseInt(text);
